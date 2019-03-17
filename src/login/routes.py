@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from login import loginApp, loginDB
 from login.forms import LoginForm, RegistrationForm
@@ -65,3 +65,31 @@ def register():
 		return redirect(url_for("login"))
 
 	return render_template("register.html", title="Register", form=form)
+
+@loginApp.route("/users", methods=["GET"])
+def getUsers():
+	users = User.query.all()
+	return jsonify([User.serialize(user) for user in users])
+
+@loginApp.route("/users/<user_id>", methods=["GET"])
+def getSingleUser(user_id):
+	response_object = {
+		'status': 'fail',
+		'message': 'User does not exist'
+	}
+	try:
+		user = User.query.filter_by(id=int(user_id)).first()
+		if not user:
+			return jsonify(response_object), 404
+		else:
+			response_object = {
+				'status': 'success',
+				'data': {
+					'id': user.id,
+					'username': user.username,
+					'email': user.email,
+				}
+			}
+			return jsonify(response_object), 200
+	except ValueError:
+		return jsonify(response_object), 404
