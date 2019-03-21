@@ -1,0 +1,26 @@
+body{
+    background-image: url(img/bg.jpeg) no-repeat center center fixed;
+    background-size: cover; 
+}
+.main-section{
+    margin: 0 auto;
+    margin-top: 130px;
+    padding: 0 18px;
+    border-radius: 10px;
+
+}
+.user-img img{
+    height: 120px;
+    width: 120px;
+
+}
+
+.user-img{
+    margin-top: -60px;
+    margin-bottom: 45px;
+}
+
+.form-group{
+    margin-bottom: 25px;
+
+}
