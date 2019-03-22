@@ -10,7 +10,7 @@ class User(UserMixin, loginDB.Model):
 	password_hash = loginDB.Column(loginDB.String(128))
 
 	def __repr__(self):
-		return '<User {}>'.format(self.username)
+		return "<User {}>".format(self.username)
 
 	def set_password(self, password):
 		self.password_hash = generate_password_hash(password)
@@ -20,9 +20,9 @@ class User(UserMixin, loginDB.Model):
 
 	def serialize(self):
 		return {
-			'id': self.id,
-			'username': self.username,
-			'email': self.email,
+			"id": self.id,
+			"username": self.username,
+			"email": self.email,
 		}
 
 @login.user_loader
