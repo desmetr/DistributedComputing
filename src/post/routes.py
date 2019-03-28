@@ -5,16 +5,15 @@ from post.forms import PostForm
 from post.models import Post
 from werkzeug.urls import url_parse
 
-@postApp.route("/", methods=["GET"])
-@postApp.route("/index", methods=["GET"])
-def index():
+@postApp.route("/posts", methods=["GET"])
+def posts():
 	posts = Post.query.all()
-	return render_template("index.html", title="Home", posts=posts)
+	return render_template("posts.html", title="Home", posts=posts)
 
 @postApp.route("/post", methods=["GET", "POST"])
 def makePost():
 	# if current_user.is_authenticated:
-	# 	return redirect(url_for("index"))
+	# 	return redirect(url_for("posts"))
 	
 	form = PostForm()
 	if form.validate_on_submit():
@@ -24,6 +23,6 @@ def makePost():
 		postDB.session.commit()
 
 		flash("Successfully created a new post!")
-		return redirect(url_for("index"))
+		return redirect(url_for("posts"))
 
 	return render_template("post.html", title="Post", form=form)

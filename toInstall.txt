@@ -2,3 +2,15 @@ flask-wtf
 flask-migrate
 flask-SQLAlchemy
 flask-login
+
+
+----
+
+SQLAlchemy commands for new database
+1) flask db init
+2) flask db migrate -m "new table"
+3) flask db upgrade
+4) open flask shell
+5) db.create_all()
+
+test with opening flask shell and accessing the new table
