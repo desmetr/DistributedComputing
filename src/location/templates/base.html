@@ -1,0 +1,28 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Feesbook</title>
+      {% else %}
+      <title>Welcome to Feesbook</title>
+      {% endif %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
+    <body>
+        <div>
+          Feesbook:
+          <a href="{{ url_for('layout') }}">Maps</a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
