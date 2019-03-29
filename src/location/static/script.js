@@ -1,10 +1,16 @@
 $(document).ready(function() {
 
-  $("#search").click(function() {
-    var searchReq = $.get("/sendRequest/" + $("#query").val());
+  $("#searchMap").click(function() {
+    var searchReq = $.get("/sendRequestMap/" + $("#query").val());
     searchReq.done(function(data) {
-      $("#url").attr("href", data.result);
+      $("#image").html(data);
     });
   });
 
+  $("#searchPhoto").click(function() {
+    var searchReq = $.get("/sendRequestPhoto/" + $("#query").val());
+    searchReq.done(function(data) {
+      $("#image").html(data);
+    });
+  });
 });

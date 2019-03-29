@@ -2,7 +2,8 @@ flask-wtf
 flask-migrate
 flask-SQLAlchemy
 flask-login
-
+requests
+imghdr
 
 ----
 
