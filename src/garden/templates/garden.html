@@ -1,15 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-</head>
-<body>
-<div class="Garden">
-    {% block content %}
-    <h1>HI</h1>
-    {% for item in gardenItems %}
-    <div><p>{{ item.item_name }} and: <b>{{ item.item_type }}</b></p></div>
-    {% endfor %}
-    {% endblock %}
+{% extends "header.html" %}
+{% block content %}
+
+
+<div class="card">
+    <h5 class="card-header">My Garden</h5>
+    <div class="card-body">
+
+        <div class="row">
+            {% for item in gardenItems %}
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <img src="{{  url_for('static', filename='img/logo.png') }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.item_name }}</h5>
+                        <p class="card-text">{{ item.item_type }}</p>
+                        <a href="#" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+{% endblock %}
+

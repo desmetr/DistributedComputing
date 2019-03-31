@@ -6,6 +6,7 @@ from garden import app
 @app.route("/garden", methods=['GET' , 'POST'])
 def garden():
     gardenItems = Garden.query.all();
+
     return render_template('garden.html', title="Garden",  gardenItems=gardenItems)
 
 @app.route("/garden/vegetable", methods=['GET','POST'])
