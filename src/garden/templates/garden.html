@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<div class="Garden">
+    {% block content %}
+    <h1>HI</h1>
+    {% for item in gardenItems %}
+    <div><p>{{ item.item_name }} and: <b>{{ item.item_type }}</b></p></div>
+    {% endfor %}
+    {% endblock %}
+</div>
+</body>
+</html>
