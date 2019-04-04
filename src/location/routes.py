@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify
 import requests
 import imghdr
-from key import key
+from location.key import key
 from location import locationApp
 
 search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
@@ -36,3 +36,7 @@ def resultsPhoto(query):
 		photo.write(photo_request.content)
 
 	return "<img src=" + photo_name + ">"
+
+@locationApp.route("/sendRequestCurrentLocation/")
+def currentLocation():
+	return render_template("currentLocation.html")

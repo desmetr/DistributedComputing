@@ -1,7 +1,7 @@
-# install flask-WTF first!
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+# from models import User
 from login.models import User
 
 class LoginForm(FlaskForm):
@@ -13,8 +13,11 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
 	username = StringField("Username", validators=[DataRequired()])
 	email = StringField("Email", validators=[DataRequired(), Email()])
+	location = StringField("Location", validators=[DataRequired()])
+
 	password = PasswordField("Password", validators=[DataRequired()])
 	password2 = PasswordField("Repeat Password", validators=[DataRequired(), EqualTo("password")])
+	
 	submit = SubmitField("Register")
 
 	def validate_username(self, username):

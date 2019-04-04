@@ -1,5 +1,10 @@
+# File types
 .aux
 .dvi
 .log
 .synctex.gz
 .pyc
+
+# Folders
+venv/
+__pychache__/

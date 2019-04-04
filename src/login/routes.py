@@ -1,7 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
+# from __init__ import loginApp, loginDB
 from login import loginApp, loginDB
+# from forms import LoginForm, RegistrationForm
 from login.forms import LoginForm, RegistrationForm
+# from models import User
 from login.models import User
 from werkzeug.urls import url_parse
 
@@ -55,7 +58,7 @@ def register():
 	
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(username=form.username.data, email=form.email.data)
+		user = User(username=form.username.data, email=form.email.data, location=form.location.data)
 		user.set_password(form.password.data)
 
 		loginDB.session.add(user)
@@ -88,8 +91,13 @@ def getSingleUser(user_id):
 					'id': user.id,
 					'username': user.username,
 					'email': user.email,
+					'location': user.location,
 				}
 			}
 			return jsonify(response_object), 200
 	except ValueError:
 		return jsonify(response_object), 404
+
+
+if __name__ == "__main__":
+	loginApp.run(debug=True)

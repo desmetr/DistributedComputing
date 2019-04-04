@@ -1,4 +1,5 @@
 # install Flask SQLAlchemy and Flask Migrate!
+# from __init__ import loginDB, login
 from login import loginDB, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -8,6 +9,7 @@ class User(UserMixin, loginDB.Model):
 	username = loginDB.Column(loginDB.String(64), index=True, unique=True)
 	email = loginDB.Column(loginDB.String(120), index=True, unique=True)
 	password_hash = loginDB.Column(loginDB.String(128))
+	location = loginDB.Column(loginDB.String(128))
 
 	def __repr__(self):
 		return "<User {}>".format(self.username)
@@ -23,6 +25,7 @@ class User(UserMixin, loginDB.Model):
 			"id": self.id,
 			"username": self.username,
 			"email": self.email,
+			"location": self.location,
 		}
 
 @login.user_loader

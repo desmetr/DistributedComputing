@@ -1,4 +1,6 @@
+# import loginApp, loginDB
 from login import loginApp, loginDB
+# from models import User
 from login.models import User
 
 @loginApp.shell_context_processor
