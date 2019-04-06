@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  	<div id="geolocation"></div> 
+	<script id="locationScript" src="{{ url_for('static', filename='locationScript.js') }}"></script>
+	<!-- <script id="locationScript">{{ locationScript }}</script> -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ15yyZ8ISMOdbAlV8_7I0VSVrwMqXdgg&callback=initMap"></script>
+{% endblock %}

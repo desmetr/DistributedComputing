@@ -60,6 +60,7 @@ def register():
 	if form.validate_on_submit():
 		user = User(username=form.username.data, email=form.email.data, location=form.location.data)
 		user.set_password(form.password.data)
+		user.calculateLatLng()
 
 		loginDB.session.add(user)
 		loginDB.session.commit()

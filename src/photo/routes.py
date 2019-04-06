@@ -18,7 +18,7 @@ def allowed_file(filename):
 @photoApp.route('/photo')
 def photo():
 	form = PhotoForm()
-	return render_template('upload.html', title='Photo',form=form)
+	return render_template('upload.html', title='Photo', form=form)
 
 @photoApp.route('/upload', methods=['GET', 'POST'])
 def upload():

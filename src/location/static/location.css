@@ -1,0 +1,13 @@
+/* Always set the map height explicitly to define the size of the div * element that contains the map. */
+
+#locationControls
+{
+	height: 5%;
+	width: 100%;
+}
+
+#geolocation 
+{
+	height: 100%;
+	width: 100%;
+}

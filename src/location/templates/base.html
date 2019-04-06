@@ -5,15 +5,12 @@
       {% else %}
       <title>Welcome to Feesbook</title>
       {% endif %}
+      <meta charset="utf-8">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <script src="{{ url_for('static', filename='script.js') }}"></script>
+      <link rel="stylesheet" href="{{ url_for('static', filename='location.css') }}">
     </head>
     <body>
-        <div>
-          Feesbook:
-          <a href="{{ url_for('layout') }}">Maps</a>
-        </div>
-        <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
