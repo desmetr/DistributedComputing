@@ -9,58 +9,7 @@ search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 photos_url = "https://maps.googleapis.com/maps/api/place/photo"
 template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "&q="
-# geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"	
-
-locationScriptStart =  "function initMap()\n"
-locationScriptStart += "{\n"
-locationScriptStart += "	var map, yourMarker;\n"
-locationScriptStart += "	var defaultLocation = {lat: 51.219, lng: 4.402}; // Default location is Antwerp\n"
-locationScriptStart += "\n"
-locationScriptStart += "	map = new google.maps.Map(document.getElementById('geolocation'), {\n"
-locationScriptStart += "		center: defaultLocation,\n" 
-locationScriptStart += "		zoom: 15,\n" 
-locationScriptStart += "		gestureHandling: 'cooperative'});\n"	
-locationScriptStart += "\n"
-locationScriptStart += "	yourMarker = new google.maps.Marker({\n"
-locationScriptStart += " 		position: defaultLocation,\n" 
-locationScriptStart += " 		map: map,\n"
-locationScriptStart += " 		label: 'hello world'});\n"
-locationScriptStart += "\n"
-locationScriptStart += "	// Try HTML5 geolocation\n"
-locationScriptStart += "	if (navigator.geolocation)\n"
-locationScriptStart += "{\n"
-locationScriptStart += "    navigator.geolocation.getCurrentPosition(function(position)\n"
-locationScriptStart += "    {\n"
-locationScriptStart += "        var pos = \n"
-locationScriptStart += "        {\n"
-locationScriptStart += "            lat: position.coords.latitude,\n"
-locationScriptStart += "            lng: position.coords.longitude\n"
-locationScriptStart += "        };\n"
-locationScriptStart += "\n"
-locationScriptStart += "        map.setCenter(pos);\n"
-locationScriptStart += "        yourMarker.setPosition(pos);\n"
-locationScriptStart += "    },\n"
-locationScriptStart += "\n"
-locationScriptStart += "    function()\n"
-locationScriptStart += "    {\n"
-locationScriptStart += "        handleLocationError(true, infoWindow, map.getCenter());\n"
-locationScriptStart += "    });\n"
-
-locationScriptEnd = "	}\n"
-locationScriptEnd += "	else\n"
-locationScriptEnd += "	{\n"
-locationScriptEnd += "		// Browser doesn't support Geolocation\n"
-locationScriptEnd += "		handleLocationError(false, infoWindow, map.getCenter());\n"
-locationScriptEnd += "	}\n"
-locationScriptEnd += "}\n"
-locationScriptEnd += "\n"
-locationScriptEnd += "function handleLocationError(browserHasGeoLocation, infoWindow, pos)\n"
-locationScriptEnd += "{\n"
-locationScriptEnd += "	infoWindow.setPosition(pos);\n"
-locationScriptEnd += "	infoWindow.setContent(browserHasGeoLocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser does not support geolocation.');\n"
-locationScriptEnd += "	infoWindow.open(map);\n"
-locationScriptEnd += "}\n"
-         
+# geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"         
 
 @locationApp.route("/location", methods=["GET"])
 def layout():
@@ -93,8 +42,13 @@ def resultsPhoto(query):
 
 @locationApp.route("/sendRequestOthers/", methods=["GET", "POST"])
 def showOthersOnMap():
-	tempAddresses = [['Alice', 'goormansstraat 20, zandhoven'], ['Bob', 'molenheide 104, pulderbos'], ['Charlie', 'viesenboslaan 32, pulderbos']]
-	locationScript = locationScriptStart
+	tempAddresses = [['Alice', 'goormansstraat 20, zandhoven', '/static/carrot.ico'], 
+					 ['Bob', 'molenheide 104, pulderbos', '/static/potato.ico'], 
+					 ['Charlie', 'viesenboslaan 32, pulderbos', '/static/eggplant.ico']]
+
+	locationScriptStart = open("static/locationScriptStart.js", "r")
+	locationScript = locationScriptStart.read()
+	locationScriptStart.close()
 
 	for counter, address in enumerate(tempAddresses):
 		search_payload = {"key" : key, "query" : address[1]}
@@ -109,14 +63,26 @@ def showOthersOnMap():
 			var marker""" + str(counter) + """ = new google.maps.Marker({
 				position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
 				map: map,
+				icon: '""" + address[2] + """',
 				label: '""" + address[0] + """'});
+
+			marker""" + str(counter) + """.addListener('click', function() {
+				callbackToServer(marker""" + str(counter) + """.label);
+			})
 
 			"""
 	
-	locationScript += locationScriptEnd
+	locationScriptEnd = open("static/locationScriptEnd.js", "r")
+	locationScript += locationScriptEnd.read()
+	locationScriptEnd.close()
 
 	f = open("static/locationScript.js", "w+")
 	f.write(locationScript)
 	f.close()
 	
 	return render_template("location.html")
+
+@locationApp.route("/callback/<string:query>", methods=["GET", "POST", "OPTIONS"])
+def callback(query):
+	print("You clicked on ", query)
+	return "200 OK"
