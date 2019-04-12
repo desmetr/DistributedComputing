@@ -3,21 +3,30 @@
 
 <div style="width:100%; padding: 20px; overflow-y: scroll;">
     <div id="messages"></div>
-    <div style="padding-top: 20px;">
-        <form onsubmit="return sendMessage()">
-            <input id="message" type="text" style="width: 70%;"><button style="width: 25%">Send</button>
+    <div style="padding-top: 20px;position: fixed;bottom:3%;width:100%;">
+        <form onsubmit="return sendMessage()" style="">
+            <input id="message" type="text" style="width: 80%;">
+            <button style="width: 10%">Send</button>
         </form>
     </div>
     <script>
     var ws = new WebSocket("ws://localhost:8888/websocket");
-    var username = prompt("What's your name?");
+    var username = prompt("Please enter your name:", "John Doe");
 
     function sendMessage() {
         var messageInput = document.getElementById("message");
         var message = messageInput.value;
+        var today = new Date();
+        var time = today.getHours() + ":";
+        if(today.getMinutes()<10){
+            time=time+"0"+today.getMinutes();
+        }else {
+            time = time + today.getMinutes();
+        }
         var payload = {
             "message": message,
-            "user": username
+            "user": username,
+            "time": time
         }
         // Make the request to the WebSocket.
         ws.send(JSON.stringify(payload));
@@ -30,7 +39,24 @@
         var messageDict = JSON.parse(evt.data);
         // Create a div with the format `user: message`.
         var messageBox = document.createElement("div");
-        messageBox.innerHTML = messageDict.user + ": " + messageDict.message;
+        var text = document.createElement("p");
+        text.innerHTML=messageDict.message;
+        var time = document.createElement("p");
+        time.innerHTML = messageDict.time;
+
+        if(username==messageDict.user){
+            messageBox.style="margin-top:10px;  width:80%;float:right;border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+            text.style="grid-area:text; text-align: right; padding-right:10px;padding-top:5px;";
+            time.style="color: #aaa;grid-area:time;text-align:right;padding-right:10px;";
+        } else {
+            messageBox.style="margin-top:10px; width:80%;float:left;border: 2px solid #dedede;background-color: #f1f1f1;border-radius: 5px;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+            text.style="grid-area:text;text-align: left;padding-left:10px;padding-top:5px;";
+            time.style="color: #999;grid-area:time;text-align: left;padding-left:10px;";
+        }
+
+        messageBox.appendChild(text);
+        messageBox.appendChild(time);
+
         document.getElementById("messages").appendChild(messageBox);
     };
     </script>
