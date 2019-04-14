@@ -4,17 +4,26 @@ import tornado.websocket
 import datetime
 
 class MainHandler(tornado.websocket.WebSocketHandler):
-    connections = set()
+    connections = {}
 
     def open(self):
-        print(self.request.uri)
-        self.connections.add(self)
+        print(self.request.uri[10:])
+        if not self.request.uri[10:] in self.connections:
+            self.connections[self.request.uri[10:]]=set()
+        self.connections[self.request.uri[10:]].add(self)
 
     def on_message(self, message):
-        [client.write_message(message) for client in self.connections]
+        print("message from: " + self.request.uri)
+        [client.write_message(message) for client in self.connections[self.request.uri[10:]]]
+        [print(client) for client in self.connections[self.request.uri[10:]]]
+
 
     def on_close(self):
-        self.connections.remove(self)
+        print("closing: " + self.request.uri)
+        if len(self.connections[self.request.uri[10:]])==1:
+            del self.connections[self.request.uri[10:]]
+        else:
+            self.connections[self.request.uri[10:]].remove(self)
 
     def check_origin(self, origin):
         return True

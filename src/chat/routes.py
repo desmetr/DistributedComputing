@@ -1,5 +1,6 @@
 from flask import render_template
 from chat import chatApp
+from chat.models import Chat
 
 @chatApp.route("/")
 @chatApp.route("/chat", methods=['GET' , 'POST'])
