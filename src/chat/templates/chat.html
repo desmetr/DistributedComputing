@@ -2,42 +2,32 @@
 {% block content %}
 <div style="height:100%">
     <div style="float: left;width:15%;height:92vh;border-right: 1px solid grey;" id="users">
-        
+        {% for user in users %}
+            <div id="{{user}}" style="margin-top:10px; border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text image';grid-template-columns:80% 20%;" onclick="userOnClick(this.id)">
+                <p style="grid-area:text; text-align: center;">{{user}}</p>
+                <img src="../static/img/userDumy.png" style="grid-area:image" />
+            </div>
+        {% endfor %}
     </div>
     <div style="width:100%; padding: 20px; overflow-y: scroll; float:right;width:80%;height:85vh">
         <div id="messages"></div>
         <div style="padding-top: 20px;position: fixed;bottom:3%;width:100%;">
             <form onsubmit="return sendMessage()" style="">
-                <input id="message" type="text" style="width: 80%;">
+                <input id="message" type="text" style="width: 65%;">
                 <button style="width: 10%">Send</button>
             </form>
         </div>
     </div>
 </div>
     <script>
-    var ws = new WebSocket("ws://192.168.0.234:8888/websocket");
-    var username = prompt("Please enter your name:", "John Doe");
-
-    var users = document.getElementById("users");
-    for(var i=0;i<10;i++){
-        var tempUser = document.createElement("div");
-        var text = document.createElement("p");
-        var userImage = document.createElement("img");
-        userImage.src="../static/img/userDumy.png";
-        userImage.style="grid-area:image";
-        text.innerHTML="User"+(i+1);
-
-        tempUser.style="margin-top:10px; border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text image';grid-template-columns:80% 20%;";
-        text.style="grid-area:text; text-align: center;";
-
-        tempUser.appendChild(text);
-        tempUser.appendChild(userImage);
-        users.appendChild(tempUser);
+    var username = prompt("Please enter your name:", "User1");
+    var ws = new WebSocket("ws://192.168.0.234:8888/websocket/"+username.replace(" ","").toLowerCase());
+    ws.onopen = function(event){
     }
 
     function sendMessage() {
-        var messageInput = document.getElementById("message");
-        var message = messageInput.value;
+        var txtMessage = document.getElementById("message");
+        var message = txtMessage.value;
         var today = new Date();
         var time = today.getHours() + ":";
         if(today.getMinutes()<10){
@@ -50,16 +40,13 @@
             "user": username,
             "time": time
         }
-        // Make the request to the WebSocket.
         ws.send(JSON.stringify(payload));
-        // Clear the message from the input.
-        messageInput.value = "";
+        txtMessage.value = "";
         return false;
     }
 
     ws.onmessage = function(evt) {
         var messageDict = JSON.parse(evt.data);
-        // Create a div with the format `user: message`.
         var messageBox = document.createElement("div");
         var text = document.createElement("p");
         text.innerHTML=messageDict.message;
@@ -81,6 +68,10 @@
 
         document.getElementById("messages").appendChild(messageBox);
     };
+
+    function userOnClick(id){
+        alert("You clicked on: " + id);
+    }
     </script>
 
 {% endblock %}
