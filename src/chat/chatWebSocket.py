@@ -16,7 +16,7 @@ class MainHandler(tornado.websocket.WebSocketHandler):
         self.connections.remove(self)
 
     def check_origin(self, origin):
-        return origin=="http://localhost:5000"
+        return True
     
 def make_app():
     return tornado.web.Application([
