@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-import datetime
 
 class MainHandler(tornado.websocket.WebSocketHandler):
     connections = {}
@@ -16,7 +15,6 @@ class MainHandler(tornado.websocket.WebSocketHandler):
         print("message from: " + self.request.uri)
         [client.write_message(message) for client in self.connections[self.request.uri[10:]]]
         [print(client) for client in self.connections[self.request.uri[10:]]]
-
 
     def on_close(self):
         print("closing: " + self.request.uri)

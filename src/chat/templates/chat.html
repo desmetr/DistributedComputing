@@ -49,37 +49,47 @@
         }
         alert("You clicked on: " + id);
         document.getElementById("messages").innerHTML="";
-        if(username>id){
-            ws = new WebSocket("ws://127.0.0.1:8888/websocket/"+username.replace(" ","").toLowerCase()+id.toLowerCase());
-        } else {
-            ws = new WebSocket("ws://127.0.0.1:8888/websocket/"+id.toLowerCase()+username.replace(" ","").toLowerCase());
+
+        var request = new XMLHttpRequest()
+
+        request.open('GET', 'http://localhost:5000/chat/'+username+'/'+id, true)
+        request.onload = function() {
+          // Begin accessing JSON data here
+          var data = JSON.parse(this.response);
+
+          if (request.status >= 200 && request.status < 400) {
+            ws = new WebSocket("ws://127.0.0.1:8888/websocket/"+data.id);
+
+            ws.onmessage = function(evt) {
+                var messageDict = JSON.parse(evt.data);
+                var messageBox = document.createElement("div");
+                var text = document.createElement("p");
+                text.innerHTML=messageDict.message;
+                var time = document.createElement("p");
+                time.innerHTML = messageDict.time;
+
+                if(username==messageDict.user){
+                    messageBox.style="margin-top:10px;  width:80%;float:right;border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+                    text.style="grid-area:text; text-align: right; padding-right:10px;padding-top:5px;";
+                    time.style="color: #aaa;grid-area:time;text-align:right;padding-right:10px;";
+                } else {
+                    messageBox.style="margin-top:10px; width:80%;float:left;border: 2px solid #dedede;background-color: #f1f1f1;border-radius: 5px;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+                    text.style="grid-area:text;text-align: left;padding-left:10px;padding-top:5px;";
+                    time.style="color: #999;grid-area:time;text-align: left;padding-left:10px;";
+                }
+
+                messageBox.appendChild(text);
+                messageBox.appendChild(time);
+
+                document.getElementById("messages").appendChild(messageBox);
+            };
+          } else {
+            console.log('error');
+          }
         }
 
-        ws.onmessage = function(evt) {
-            var messageDict = JSON.parse(evt.data);
-            var messageBox = document.createElement("div");
-            var text = document.createElement("p");
-            text.innerHTML=messageDict.message;
-            var time = document.createElement("p");
-            time.innerHTML = messageDict.time;
-
-            if(username==messageDict.user){
-                messageBox.style="margin-top:10px;  width:80%;float:right;border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
-                text.style="grid-area:text; text-align: right; padding-right:10px;padding-top:5px;";
-                time.style="color: #aaa;grid-area:time;text-align:right;padding-right:10px;";
-            } else {
-                messageBox.style="margin-top:10px; width:80%;float:left;border: 2px solid #dedede;background-color: #f1f1f1;border-radius: 5px;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
-                text.style="grid-area:text;text-align: left;padding-left:10px;padding-top:5px;";
-                time.style="color: #999;grid-area:time;text-align: left;padding-left:10px;";
-            }
-
-            messageBox.appendChild(text);
-            messageBox.appendChild(time);
-
-            document.getElementById("messages").appendChild(messageBox);
-        };
+        request.send()
     }
     </script>
 
 {% endblock %}
-
