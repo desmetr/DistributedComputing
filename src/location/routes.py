@@ -9,7 +9,11 @@ search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 photos_url = "https://maps.googleapis.com/maps/api/place/photo"
 template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "&q="
+users_url = "http://localhost:5000/users"
 # geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"         
+
+IN_RADIUS = False
+ICON = False
 
 @locationApp.route("/location", methods=["GET"])
 def layout():
@@ -40,38 +44,55 @@ def resultsPhoto(query):
 
 	return "<img src=" + photo_name + ">"
 
-@locationApp.route("/sendRequestOthers/", methods=["GET", "POST"])
+@locationApp.route("/sendRequestOthers", methods=["GET", "POST"])
 def showOthersOnMap():
-	tempAddresses = [['Alice', 'goormansstraat 20, zandhoven', '/static/carrot.ico'], 
-					 ['Bob', 'molenheide 104, pulderbos', '/static/potato.ico'], 
-					 ['Charlie', 'viesenboslaan 32, pulderbos', '/static/eggplant.ico']]
+	# Structure of an address:
+	#	[id, username, lat, lng]
+	# can be extended to
+	#	[id, username, lat, lng, icon]
+
+	addresses = getAllAddressesFromUsers()
 
 	locationScriptStart = open("static/locationScriptStart.js", "r")
 	locationScript = locationScriptStart.read()
 	locationScriptStart.close()
 
-	for counter, address in enumerate(tempAddresses):
-		search_payload = {"key" : key, "query" : address[1]}
-		search_request = requests.get(search_url, params=search_payload)
-		search_json = search_request.json()
-
-		location = search_json["results"][0]["geometry"]["location"]
-		lat = location["lat"]
-		lng = location["lng"]
+	for _, address in enumerate(addresses):
+		lat = address[2]
+		lng = address[3]
 
 		locationScript += """
-			var marker""" + str(counter) + """ = new google.maps.Marker({
+			var marker""" + str(address[0]) + """ = new google.maps.Marker({
 				position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
+			"""
+		
+		if not IN_RADIUS:
+			locationScript += """
 				map: map,
-				icon: '""" + address[2] + """',
-				label: '""" + address[0] + """'});
+				"""
 
-			marker""" + str(counter) + """.addListener('click', function() {
-				callbackToServer(marker""" + str(counter) + """.label);
+		if ICON:
+			locationScript += """
+				icon: '""" + address[4] + """',
+				"""
+
+		locationScript += """
+				label: '""" + address[1] + """'});
+
+			marker""" + str(address[0]) + """.addListener('click', function() {
+				callbackToServer(marker""" + str(address[0]) + """.label);
 			})
 
 			"""
 	
+		if IN_RADIUS:
+			locationScript += """
+				if (checkRadius(currentPso.lat, currentPos.lng, """ + str(lat) + """, """ + str(lng) + """, zoomLevel))
+					marker""" + str(address[0]) + """.setMap(null);
+				else
+					marker""" + str(address[0]) + """.setMap(map);
+			"""
+
 	locationScriptEnd = open("static/locationScriptEnd.js", "r")
 	locationScript += locationScriptEnd.read()
 	locationScriptEnd.close()
@@ -86,3 +107,23 @@ def showOthersOnMap():
 def callback(query):
 	print("You clicked on ", query)
 	return "200 OK"
+
+
+def getAllAddressesFromUsers():
+	addresses = []
+
+	# {
+	# 	"id": self.id,
+	#	"username": self.username,
+	#	"email": self.email,
+	#	"location": self.location,
+	#	"lat": self.lat,
+	#	"lng": self.lng,
+	# }
+
+	response = requests.get(users_url)
+
+	for user in response.json():
+		addresses.append([user["id"], user["username"], user["lat"], user["lng"]])
+
+	return addresses

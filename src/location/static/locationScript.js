@@ -1,31 +1,46 @@
+function checkRadius(centerLat, centerLng, newLat, newLng, zoomLevel)
+{
+	var km = 5;
+
+	var kX = Math.cos(Math.PI * centerLat / 180.0) * kY;
+	var kY = 40000 / 360;
+
+	var dX = Math.abs(centerLng - newLng) * kX;
+	var dY = Math.abs(centerLat - newLat) * kY;
+
+	return Math.sqrt(dX * dX + dY * dY) <= km;
+}
+
 function initMap()
 {
 	var map, yourMarker;
+	var zoomLevel = 15;
 	var defaultLocation = {lat: 51.219, lng: 4.402}; // Default location is Antwerp
+	var currentPos = defaultLocation;
 
 	map = new google.maps.Map(document.getElementById('geolocation'), {
 		center: defaultLocation,
-		zoom: 15,
+		zoom: zoomLevel,
 		gestureHandling: 'cooperative'});
 
 	yourMarker = new google.maps.Marker({
  		position: defaultLocation,
  		map: map,
- 		label: 'hello world'});
+ 		label: 'Your position'});
 
 	// Try HTML5 geolocation
 	if (navigator.geolocation)
 	{
 	    navigator.geolocation.getCurrentPosition(function(position)
 	    {
-	        var pos = 
+	        currentPos = 
 	        {
 	            lat: position.coords.latitude,
 	            lng: position.coords.longitude
 	        };
 
-	        map.setCenter(pos);
-	        yourMarker.setPosition(pos);
+	        map.setCenter(currentPos);
+	        yourMarker.setPosition(currentPos);
 	    },
 
     function()
@@ -44,22 +59,12 @@ function initMap()
 			dataType: "json"
 		})
 	}
-			var marker0 = new google.maps.Marker({
-				position: {lat: 51.2200995, lng: 4.6891696},
-				map: map,
-				icon: '/static/carrot.ico',
-				label: 'Alice'});
-
-			marker0.addListener('click', function() {
-				callbackToServer(marker0.label);
-			})
-
-			
 			var marker1 = new google.maps.Marker({
-				position: {lat: 51.22742419999999, lng: 4.699526200000001},
+				position: {lat: 51.216948, lng: 4.696734999999999},
+			
 				map: map,
-				icon: '/static/potato.ico',
-				label: 'Bob'});
+				
+				label: 'a'});
 
 			marker1.addListener('click', function() {
 				callbackToServer(marker1.label);
@@ -67,10 +72,11 @@ function initMap()
 
 			
 			var marker2 = new google.maps.Marker({
-				position: {lat: 51.2154663, lng: 4.6969522},
+				position: {lat: 51.1845547, lng: 4.4212374},
+			
 				map: map,
-				icon: '/static/eggplant.ico',
-				label: 'Charlie'});
+				
+				label: 'b'});
 
 			marker2.addListener('click', function() {
 				callbackToServer(marker2.label);
