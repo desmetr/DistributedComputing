@@ -1,16 +1,18 @@
 from cyber import app
-from flask import render_template
+from flask import render_template, request
 
 
-@app.route("/profanity/<text>", methods=['GET', 'POST'])
-def about(text):
-    f = open('Eng_bad_word.txt', "r")
+@app.route("/profanity", methods=['GET', 'POST'])
+def about():
+    text = request.args.get('text')
+
+    f = open('cyber/Eng_bad_word.txt', "r")
     eng_bad_words = f.read().splitlines()
-    m = open('dutch_bad_word.txt', "r")
+    m = open('cyber/dutch_bad_word.txt', "r")
     dutch_bad_word = m.read().splitlines()
 
     brokenStr1 = text.split()
-
+    
     badWordMask = '!@#$%!@#$%^~!@%^~@#$%!@#$%^~!'
     new = ''
     for word in brokenStr1:
@@ -19,15 +21,17 @@ def about(text):
             # print("delete the post coz it contains english bad words")
             # text = text.replace(word, badWordMask[:len(word)])
             text = "delete the post coz it contains english bad words"
+            return "BAD"
         elif word in dutch_bad_word:
             print(word + ' <--Bad word!')
             # text = text.replace(word, badWordMask[:len(word)])
             text = "delete the post coz it contains dutch bad words"
             # print("delete the post coz it contains dutch bad words")
-
+            return "BAD"
         else:
             # print("okay fine")
             text = "Ok, Fine"
+            return "GOOD"
         # print new
 
     with app.app_context():

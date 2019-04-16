@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from config import Config
+from post.config import Config
 
 postApp = Flask(__name__)
 postApp.config.from_object(Config)

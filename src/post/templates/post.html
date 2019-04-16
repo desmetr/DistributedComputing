@@ -2,15 +2,36 @@
 
 {% block content %}
     <h1>Create Post</h1>
+
+    <div class="modal fade" display={{ display }} id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form action="" method="post" novalidate>
+                            {{ postFormAfterCheck.hidden_tag() }}
+                            <p>
+                                We've found a bad word in your post! We recommend you not to post this. Are you sure you want to post this anyway or do you want to discard? <br>
+
+                                {{ postFormAfterCheck.submitAfterCheck()  }}
+                                {{ postFormAfterCheck.discardAfterCheck() }}
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
+        {{ postForm.hidden_tag() }}
         <p>
-            {{ form.postText.label }}<br>
-            {{ form.postText(size=144) }}<br>
-            {% for error in form.postText.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            {{ postForm.postText.label }}<br>
+            {{ postForm.postText(size=144) }}<br>
+            {% for error in postForm.postText.errors %}
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p>{{ postForm.submit() }}</p>
     </form>
 {% endblock %}
