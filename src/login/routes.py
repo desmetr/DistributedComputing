@@ -75,12 +75,14 @@ def getUsers():
 	users = User.query.all()
 	return jsonify([User.serialize(user) for user in users])
 
-@loginApp.route("/users/<user_id>", methods=["GET"])
-def getSingleUser(user_id):
+@loginApp.route("/user", methods=["GET"])
+def getSingleUser():
+	user_id = request.args.get('user_id')
 	response_object = {
 		'status': 'fail',
 		'message': 'User does not exist'
 	}
+	print(user_id)
 	try:
 		user = User.query.filter_by(id=int(user_id)).first()
 		if not user:

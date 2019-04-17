@@ -7,6 +7,7 @@ lengthErrorMessage = "Post should be between %(min)d and %(max)d characters!"
 class PostForm(FlaskForm):
 	postText = TextAreaField("Type Your Post", validators=[DataRequired(), Length(min=1, max=144, message=lengthErrorMessage)])
 	submit = SubmitField("Submit Post")
+	comment = SubmitField("Add Comment")
 
 class PostFormAfterCheck(FlaskForm):
 	submitAfterCheck = SubmitField("Submit Post Anyway")

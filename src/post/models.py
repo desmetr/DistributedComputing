@@ -14,4 +14,5 @@ class Post(postDB.Model):
 		return {
 			"id": self.id,
 			"postText": self.postText,
+			"user": self.user
 		}		

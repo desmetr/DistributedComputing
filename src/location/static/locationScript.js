@@ -48,14 +48,14 @@ function initMap()
         handleLocationError(true, infoWindow, map.getCenter());
     });
 
-	function callbackToServer(name) 
+	function callbackToServer(id) 
 	{
 		$.ajax({
 			type: "POST",
 			contentType: "application/json;charset=utf-8",
-			url: "http://localhost:5000/callback/" + encodeURIComponent(name),
+			url: "http://localhost:5001/callback/" + encodeURIComponent(id),
 			traditional: "true",
-			data: JSON.stringify(name),
+			data: JSON.stringify(id),
 			dataType: "json"
 		})
 	}
@@ -67,7 +67,7 @@ function initMap()
 				label: 'a'});
 
 			marker1.addListener('click', function() {
-				callbackToServer(marker1.label);
+				callbackToServer('1');
 			})
 
 			
@@ -79,7 +79,7 @@ function initMap()
 				label: 'b'});
 
 			marker2.addListener('click', function() {
-				callbackToServer(marker2.label);
+				callbackToServer('2');
 			})
 
 				}

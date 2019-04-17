@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Create Post</h1>
+
+    <form action="/comment" method="post" novalidate>
+        {{ commentForm.hidden_tag() }}
+        <p>
+            {{ commentForm.commentText.label }}<br>
+            {{ commentForm.commentText(size=144) }}<br>
+            {% for error in commentForm.commentText.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ commentForm.submit() }}</p>
+    </form>
+{% endblock %}

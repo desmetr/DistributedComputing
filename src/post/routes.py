@@ -5,17 +5,26 @@ from post.forms import PostForm, PostFormAfterCheck
 from post.models import Post
 from werkzeug.urls import url_parse
 import requests
+import itertools
 
-profanity_url = "http://localhost:5001/profanity" 
+profanity_url = "http://localhost:5001/profanity"
+comment_url = "http://localhost:5001/comment"
+all_comments_all_posts_url = "http://localhost:5001/getCommentsAllPosts"
+all_comments_one_posts_url = "http://localhost:5001/getCommentsOnePost"
 postText = ""
 
 @postApp.route("/posts", methods=["GET"])
 def posts():
 	posts = Post.query.all()
-	return render_template("posts.html", title="Home", posts=posts)
+	postForm = PostForm()
+
+	comments = requests.get(all_comments_all_posts_url).json()
+	print(comments)
+	return render_template("posts.html", title="Home", posts=posts, comments=comments, postForm=postForm)
 
 @postApp.route("/post", methods=["GET", "POST"])
 def makePost():
+	# TODO ask username of current user
 	# if current_user.is_authenticated:
 	# 	return redirect(url_for("posts"))
 	global postText
@@ -40,8 +49,6 @@ def makePost():
 
 	if postFormAfterCheck.validate_on_submit():
 		if postFormAfterCheck.submitAfterCheck.data:
-			# TODO ask username of current user
-			# post = Post(postText=postFormAfterCheck.postText.data, user="temp")
 			post = Post(postText=postText, user="temp")
 			postDB.session.add(post)
 			postDB.session.commit()
@@ -57,3 +64,15 @@ def makePost():
 			pass
 
 	return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none')
+
+@postApp.route('/makeComment', methods=["GET", "POST"])
+def makeComment():
+	postID = None
+	for key, value in request.form.items():
+		if key == "postID":
+			postID = value
+
+	# Make call to Comment API
+	response = requests.post(comment_url, params={"postID": postID})
+
+	return "OK"

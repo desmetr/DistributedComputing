@@ -10,6 +10,7 @@ details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 photos_url = "https://maps.googleapis.com/maps/api/place/photo"
 template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "&q="
 users_url = "http://localhost:5000/users"
+user_url = "http://localhost:5000/user"
 # geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"         
 
 IN_RADIUS = False
@@ -80,7 +81,7 @@ def showOthersOnMap():
 				label: '""" + address[1] + """'});
 
 			marker""" + str(address[0]) + """.addListener('click', function() {
-				callbackToServer(marker""" + str(address[0]) + """.label);
+				callbackToServer('""" + str(address[0]) + """');
 			})
 
 			"""
@@ -103,10 +104,14 @@ def showOthersOnMap():
 	
 	return render_template("location.html")
 
-@locationApp.route("/callback/<string:query>", methods=["GET", "POST", "OPTIONS"])
-def callback(query):
-	print("You clicked on ", query)
-	return "200 OK"
+@locationApp.route("/callback/<id>", methods=["GET", "POST", "OPTIONS"])
+def callback(id):
+	print("You clicked on user with id ", id)
+	response = requests.get(user_url, params={'user_id': str(id)})
+
+	responseData = response.json()["data"]
+	return render_template("tempUser.html", email=responseData["email"], id=responseData["id"], username=responseData["username"], location=responseData["location"])
+	# return "200 OK"
 
 
 def getAllAddressesFromUsers():
