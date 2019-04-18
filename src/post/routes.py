@@ -13,6 +13,7 @@ all_comments_all_posts_url = "http://localhost:5001/getCommentsAllPosts"
 all_comments_one_posts_url = "http://localhost:5001/getCommentsOnePost"
 postText = ""
 
+# MAG WEG
 @postApp.route("/posts", methods=["GET"])
 def posts():
 	posts = Post.query.all()
@@ -20,6 +21,11 @@ def posts():
 
 	comments = requests.get(all_comments_all_posts_url).json()
 	return render_template("posts.html", title="Home", posts=posts, comments=comments, postForm=postForm)
+
+@postApp.route("/getAllPosts", methods=["GET"])
+def getAllPosts():
+	posts = Post.query.all()
+	return jsonify([Post.serialize(post) for post in posts])
 
 @postApp.route("/post", methods=["GET", "POST"])
 def makePost():
