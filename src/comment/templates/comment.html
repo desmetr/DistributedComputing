@@ -4,6 +4,7 @@
     <h1>Create Post</h1>
 
     <form action="/comment" method="post" novalidate>
+    <!-- <form action="http://localhost:5000/posts" method="get" novalidate> -->
         {{ commentForm.hidden_tag() }}
         <p>
             {{ commentForm.commentText.label }}<br>

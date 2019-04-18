@@ -6,22 +6,27 @@ from comment.models import Comment
 from werkzeug.urls import url_parse
 import requests
 
+postID = None
+
 @commentApp.route("/comment", methods=["GET", "POST"])
 def comment():
-	print("in comment")
+	global postID
+
 	commentForm = CommentForm()
 
+	# We come here twice, from different forms, only use it once.
+	if 'postID' in request.form:
+		postID = request.form['postID']
+
 	if commentForm.validate_on_submit():
-		postID = request.args.get('postID')
-		postID = 2
 		commentText = commentForm.commentText.data
 
 		comment = Comment(commentText=commentText, user="temp", postID=postID)
 		commentDB.session.add(comment)
 		commentDB.session.commit()
 
-		flash("Successfully placed a comment!")
-		return 'OK'
+		print("Successfully placed a comment!")
+		return render_template("commentSuccess.html", title="Comment Success")
 
 	return render_template("comment.html", title="Comment", commentForm=commentForm)
 

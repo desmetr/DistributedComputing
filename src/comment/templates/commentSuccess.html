@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Successfully placed a comment!</h1>
+
+    <form action="http://localhost:5000/posts" method="get" novalidate>
+        <input type="submit" name="returnToPosts" value="Return To Posts">
+    </form>
+{% endblock %}

@@ -6,12 +6,11 @@
     	<div>
     		<p>
     			{{ post.user }} says: <b>{{ post.postText }}</b>
-                <form action="/makeComment" method="POST">
+                <!-- <form action="/makeComment" method="POST"> -->
+                <form action="http://localhost:5001/comment" method="POST">
                     {{ postForm.hidden_tag() }}
                     <input type="hidden" name="postID" value={{ post.id }}>
-                    <p>
-                        {{ postForm.comment() }}
-                    </p>
+                    <input type="submit" name="addComment" value="Add Comment">
                 </form>
                 {% if comments %}
         			{% for comment in comments %}
@@ -24,6 +23,7 @@
                 {% else %}
                     <i>No comments on this post.</i>
                 {% endif %} 
+                <hr>
     		</p>
     	</div>
     {% endfor %}

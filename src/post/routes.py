@@ -19,7 +19,6 @@ def posts():
 	postForm = PostForm()
 
 	comments = requests.get(all_comments_all_posts_url).json()
-	print(comments)
 	return render_template("posts.html", title="Home", posts=posts, comments=comments, postForm=postForm)
 
 @postApp.route("/post", methods=["GET", "POST"])
