@@ -1,7 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Create Post</h1>
+    <h1>Create Comment</h1>
+
+    <div class="modal fade" display={{ display }} id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form action="" method="post" novalidate>
+                            {{ commentFormAfterCheck.hidden_tag() }}
+                            <p>
+                                We've found a bad word in your comment! We recommend you not to add this comment. Are you sure you want to add this anyway or do you want to discard? <br>
+
+                                {{ commentFormAfterCheck.submitAfterCheck()  }}
+                                {{ commentFormAfterCheck.discardAfterCheck() }}
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <form action="/comment" method="post" novalidate>
     <!-- <form action="http://localhost:5000/posts" method="get" novalidate> -->

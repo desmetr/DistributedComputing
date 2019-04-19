@@ -7,3 +7,7 @@ lengthErrorMessage = "Comment should be between %(min)d and %(max)d characters!"
 class CommentForm(FlaskForm):
 	commentText = TextAreaField("Type Your Comment", validators=[Length(min=1, max=144, message=lengthErrorMessage)])
 	submit = SubmitField("Submit Comment")
+
+class CommentFormAfterCheck(FlaskForm):
+	submitAfterCheck = SubmitField("Submit Comment Anyway")
+	discardAfterCheck = SubmitField("Discard Comment")
