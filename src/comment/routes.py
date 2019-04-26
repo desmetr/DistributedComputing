@@ -5,8 +5,7 @@ from comment.forms import CommentForm, CommentFormAfterCheck
 from comment.models import Comment
 from werkzeug.urls import url_parse
 import requests
-
-profanity_url = "http://localhost:5001/profanity"
+import urlsConfig
 
 commentText = ""
 postID = None
@@ -24,7 +23,7 @@ def comment():
 
 	if commentForm.validate_on_submit():
 		commentText = commentForm.commentText.data
-		response = requests.post(profanity_url, params={'text': commentText})
+		response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': commentText})
 
 		# Only show div is post contained a bad word
 		if response.text == "BAD":
@@ -35,7 +34,7 @@ def comment():
 			commentDB.session.commit()
 
 			print("Successfully placed a comment!")
-			return render_template("commentSuccess.html", title="Comment Success")
+			return redirect(urlsConfig.URLS['newsfeed_url'])
 
 	if commentFormAfterCheck.validate_on_submit():
 		if commentFormAfterCheck.submitAfterCheck.data:
@@ -43,8 +42,8 @@ def comment():
 			commentDB.session.add(comment)
 			commentDB.session.commit()
 
-			flash("Successfully created a new post!")
-			return render_template("commentSuccess.html", title="Comment")
+			flash("Successfully created a new comment!")
+			return redirect(urlsConfig.URLS['newsfeed_url'])
 
 		elif commentFormAfterCheck.discardAfterCheck.data:
 			print("Pressed discard")

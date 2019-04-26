@@ -7,6 +7,7 @@ from login.forms import LoginForm, RegistrationForm
 # from models import User
 from login.models import User
 from werkzeug.urls import url_parse
+import urlsConfig
 
 @loginApp.route("/")
 @loginApp.route("/index")
@@ -38,11 +39,8 @@ def login():
 			return redirect(url_for("login"))
 
 		login_user(user, remember=form.remember_me.data)
-		next_page = request.args.get("next")
-		if not next_page or url_parse(next_page).netloc != "":
-			next_page = url_for("index")
 		
-		return redirect(next_page)
+		return redirect(urlsConfig.URLS['newsfeed_url'])
 
 	return render_template("login.html", title="Sign In", form=form)
 
@@ -66,7 +64,7 @@ def register():
 		loginDB.session.commit()
 
 		flash("Congratulations, you are a new registered user!")
-		return redirect(url_for("login"))
+		return redirect(urlsConfig.URLS['newsfeed_url'])
 
 	return render_template("register.html", title="Register", form=form)
 

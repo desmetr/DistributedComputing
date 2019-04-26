@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from config import Config
+from photo.config import Config
 
 photoApp = Flask(__name__)
 photoApp.config.from_object(Config)

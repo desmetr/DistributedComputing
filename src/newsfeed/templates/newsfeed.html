@@ -7,7 +7,7 @@
             <div class="column left">
                 <p>
                     {{ post.user }} says: <b>{{ post.postText }}</b>
-                    <form action="http://localhost:5001/comment" method="POST">
+                    <form action="http://localhost:5002/comment" method="POST">
                         <input type="hidden" name="postID" value={{ post.id }}>
                         <input type="submit" name="addComment" value="Add Comment">
                     </form>

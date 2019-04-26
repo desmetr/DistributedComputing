@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>Successfully placed a comment!</h1>
-
-    <form action="http://localhost:5002/newsfeed" method="get" novalidate>
-        <input type="submit" name="returnToNewsFeed" value="Return To Newsfeed">
-    </form>
-{% endblock %}
