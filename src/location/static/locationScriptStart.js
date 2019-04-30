@@ -51,8 +51,9 @@ function initMap()
 	function callbackToServer(id) 
 	{
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			contentType: "application/json;charset=utf-8",
+			// url: "http://localhost:5005/garden",
 			url: "http://localhost:5001/callback/" + encodeURIComponent(id),
 			traditional: "true",
 			data: JSON.stringify(id),

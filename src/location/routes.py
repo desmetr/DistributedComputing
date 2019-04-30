@@ -1,16 +1,15 @@
-from flask import Flask, render_template, jsonify
-import requests
-import imghdr
+from flask import Flask, render_template, jsonify, redirect
 from location.key import key
 from location import locationApp
 from location.forms import LocationForm
+import requests
+import imghdr
+import urlsConfig
 
 search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 photos_url = "https://maps.googleapis.com/maps/api/place/photo"
 template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "&q="
-users_url = "http://localhost:5000/users"
-user_url = "http://localhost:5000/user"
 # geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"         
 
 IN_RADIUS = False
@@ -77,14 +76,23 @@ def showOthersOnMap():
 				icon: '""" + address[4] + """',
 				"""
 
+		contentString = "User: " + address[1]
+		contentString += '\t<a href="' + urlsConfig.URLS['single_user_url'] + str(address[0]) + '">Go To User</a> '
+		# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a>'
+
 		locationScript += """
 				label: '""" + address[1] + """'});
 
+			var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
+				content: '""" + contentString + """'
+			})
+
 			marker""" + str(address[0]) + """.addListener('click', function() {
-				callbackToServer('""" + str(address[0]) + """');
+				infoWindow""" + str(address[0]) + """.open(map, marker""" + str(address[0]) + """)
 			})
 
 			"""
+		contentString = ""
 	
 		if IN_RADIUS:
 			locationScript += """
@@ -107,12 +115,13 @@ def showOthersOnMap():
 @locationApp.route("/callback/<id>", methods=["GET", "POST", "OPTIONS"])
 def callback(id):
 	print("You clicked on user with id ", id)
-	response = requests.get(user_url, params={'user_id': str(id)})
+	response = requests.get(urlsConfig.URLS['single_user_url'], params={'user_id': str(id)})
 
 	responseData = response.json()["data"]
-	return render_template("tempUser.html", email=responseData["email"], id=responseData["id"], username=responseData["username"], location=responseData["location"])
-	# return "200 OK"
-
+	print(urlsConfig.URLS['garden_url'])
+	return redirect(urlsConfig.URLS['garden_url'])
+	# return redirect(urlsConfig.URLS['garden_url'])
+	# return render_template("tempUser.html", email=responseData["email"], id=responseData["id"], username=responseData["username"], location=responseData["location"])
 
 def getAllAddressesFromUsers():
 	addresses = []
@@ -126,9 +135,14 @@ def getAllAddressesFromUsers():
 	#	"lng": self.lng,
 	# }
 
-	response = requests.get(users_url)
+	response = requests.get(urlsConfig.URLS['users_url'])
 
 	for user in response.json():
 		addresses.append([user["id"], user["username"], user["lat"], user["lng"]])
 
 	return addresses
+
+
+	# marker""" + str(address[0]) + """.addListener('click', function() {
+				# callbackToServer('""" + str(address[0]) + """');
+			# })

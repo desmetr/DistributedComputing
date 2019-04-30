@@ -51,8 +51,9 @@ function initMap()
 	function callbackToServer(id) 
 	{
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			contentType: "application/json;charset=utf-8",
+			// url: "http://localhost:5005/garden",
 			url: "http://localhost:5001/callback/" + encodeURIComponent(id),
 			traditional: "true",
 			data: JSON.stringify(id),
@@ -66,8 +67,12 @@ function initMap()
 				
 				label: 'a'});
 
+			var infoWindow1 = new google.maps.InfoWindow({
+				content: 'User: a	<a href="http://localhost:5000/user?user_id=1">Go To User</a> '
+			})
+
 			marker1.addListener('click', function() {
-				callbackToServer('1');
+				infoWindow1.open(map, marker1)
 			})
 
 			
@@ -78,8 +83,28 @@ function initMap()
 				
 				label: 'b'});
 
+			var infoWindow2 = new google.maps.InfoWindow({
+				content: 'User: b	<a href="http://localhost:5000/user?user_id=2">Go To User</a> '
+			})
+
 			marker2.addListener('click', function() {
-				callbackToServer('2');
+				infoWindow2.open(map, marker2)
+			})
+
+			
+			var marker3 = new google.maps.Marker({
+				position: {lat: 51.1845547, lng: 4.4212374},
+			
+				map: map,
+				
+				label: 'g'});
+
+			var infoWindow3 = new google.maps.InfoWindow({
+				content: 'User: g	<a href="http://localhost:5000/user?user_id=3">Go To User</a> '
+			})
+
+			marker3.addListener('click', function() {
+				infoWindow3.open(map, marker3)
 			})
 
 				}
