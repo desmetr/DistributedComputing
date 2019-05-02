@@ -6,6 +6,7 @@ class Comment(commentDB.Model):
 	commentText = commentDB.Column(commentDB.String(144), index=True)
 	postID = commentDB.Column(commentDB.Integer)
 	user = commentDB.Column(commentDB.String(64), index=True)
+	timestamp = commentDB.Column(commentDB.DateTime, nullable=False)
 
 	def __repr__(self):
 		return "<Comment {}, text = \"{}\" by user {}>".format(self.id, self.commentText, self.user)
@@ -15,5 +16,6 @@ class Comment(commentDB.Model):
 			"id": self.id,
 			"commentText": self.commentText,
 			"postID": self.postID,
-			"user": self.user
+			"user": self.user,
+			"timestamp": self.timestamp
 		}		

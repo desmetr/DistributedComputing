@@ -4,6 +4,8 @@ from comment import commentApp, commentDB
 from comment.forms import CommentForm, CommentFormAfterCheck
 from comment.models import Comment
 from werkzeug.urls import url_parse
+from sqlalchemy import desc
+from datetime import datetime
 import requests
 import urlsConfig
 
@@ -29,7 +31,7 @@ def comment():
 		if response.text == "BAD":
 			return render_template("comment.html", title="Comment", commentForm=commentForm, commentFormAfterCheck=commentFormAfterCheck, display='')
 		elif response.text == "GOOD":
-			comment = Comment(commentText=commentText, user="temp", postID=postID)
+			comment = Comment(commentText=commentText, user="temp", postID=postID, timestamp=datetime.now())
 			commentDB.session.add(comment)
 			commentDB.session.commit()
 
@@ -38,7 +40,7 @@ def comment():
 
 	if commentFormAfterCheck.validate_on_submit():
 		if commentFormAfterCheck.submitAfterCheck.data:
-			comment = Comment(commentText=commentText, user="temp", postID=postID)
+			comment = Comment(commentText=commentText, user="temp", postID=postID, timestamp=datetime.now())
 			commentDB.session.add(comment)
 			commentDB.session.commit()
 
@@ -62,5 +64,6 @@ def getCommentsOfPost():
 
 @commentApp.route("/getCommentsAllPosts", methods=["GET"])
 def getCommentsOfAllPosts():
-	comments = Comment.query.all()
+	# comments = Comment.query.all()
+	comments = Comment.query.order_by(desc(Comment.timestamp)).all()
 	return jsonify([Comment.serialize(comment) for comment in comments])

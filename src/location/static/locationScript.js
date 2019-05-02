@@ -68,7 +68,7 @@ function initMap()
 				label: 'a'});
 
 			var infoWindow1 = new google.maps.InfoWindow({
-				content: 'User: a	<a href="http://localhost:5000/user?user_id=1">Go To User</a> '
+				content: 'User: a	<a href="http://localhost:5000/user?user_id=1">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
 			})
 
 			marker1.addListener('click', function() {
@@ -84,7 +84,7 @@ function initMap()
 				label: 'b'});
 
 			var infoWindow2 = new google.maps.InfoWindow({
-				content: 'User: b	<a href="http://localhost:5000/user?user_id=2">Go To User</a> '
+				content: 'User: b	<a href="http://localhost:5000/user?user_id=2">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
 			})
 
 			marker2.addListener('click', function() {
@@ -100,7 +100,7 @@ function initMap()
 				label: 'g'});
 
 			var infoWindow3 = new google.maps.InfoWindow({
-				content: 'User: g	<a href="http://localhost:5000/user?user_id=3">Go To User</a> '
+				content: 'User: g	<a href="http://localhost:5000/user?user_id=3">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
 			})
 
 			marker3.addListener('click', function() {

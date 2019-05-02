@@ -78,6 +78,7 @@ def showOthersOnMap():
 
 		contentString = "User: " + address[1]
 		contentString += '\t<a href="' + urlsConfig.URLS['single_user_url'] + str(address[0]) + '">Go To User</a> '
+		contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '">Chat With User</a>'
 		# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a>'
 
 		locationScript += """

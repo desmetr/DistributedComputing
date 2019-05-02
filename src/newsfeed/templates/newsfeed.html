@@ -7,11 +7,7 @@
             {% for post in posts %}
                 <p>
                     {{ post.user }} says: <b>{{ post.postText }}</b>
-                    <form action="http://localhost:5002/comment" method="POST">
-                        <input type="hidden" name="postID" value={{ post.id }}>
-                        <input type="submit" name="addComment" value="Add Comment">
-                    </form>
-
+                    
                     {% if comments %}
                         {% for comment in comments %}
                         <p>
@@ -23,6 +19,19 @@
                     {% else %}
                         <i>No comments on this post.</i>
                     {% endif %} 
+
+                    <form action="http://localhost:5002/comment" method="POST">
+                        <input type="hidden" name="postID" value={{ post.id }}>
+                        {{ commentForm.hidden_tag() }}
+                        <p>
+                            {{ commentForm.commentText.label }}<br>
+                            {{ commentForm.commentText(size=144) }}<br>
+                          <!--   {% for error in commentForm.commentText.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %} -->
+                        </p>
+                        <p>{{ commentForm.submit() }}</p>
+                    </form>
                     <hr>
                 </p>
             {% endfor %}

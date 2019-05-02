@@ -1,8 +1,8 @@
-"""comments table
+"""comment table
 
-Revision ID: efa25eacf969
+Revision ID: d1c0afcff3da
 Revises: 
-Create Date: 2019-04-17 13:47:08.632377
+Create Date: 2019-05-02 18:12:36.831086
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'efa25eacf969'
+revision = 'd1c0afcff3da'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('commentText', sa.String(length=144), nullable=True),
     sa.Column('postID', sa.Integer(), nullable=True),
     sa.Column('user', sa.String(length=64), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_comment_commentText'), 'comment', ['commentText'], unique=False)

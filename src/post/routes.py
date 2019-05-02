@@ -4,6 +4,8 @@ from post import postApp, postDB
 from post.forms import PostForm, PostFormAfterCheck
 from post.models import Post
 from werkzeug.urls import url_parse
+from sqlalchemy import desc
+from datetime import datetime
 import requests
 import itertools
 import urlsConfig
@@ -12,7 +14,8 @@ postText = ""
 
 @postApp.route("/getAllPosts", methods=["GET"])
 def getAllPosts():
-	posts = Post.query.all()
+	# posts = Post.query.all()
+	posts = Post.query.order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
 @postApp.route("/post", methods=["GET", "POST"])
@@ -34,7 +37,7 @@ def makePost():
 		if response.text == "BAD":
 			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='')
 		elif response.text == "GOOD":
-			post = Post(postText=postText, user="temp")
+			post = Post(postText=postText, user="temp", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
 
@@ -43,7 +46,7 @@ def makePost():
 
 	if postFormAfterCheck.validate_on_submit():
 		if postFormAfterCheck.submitAfterCheck.data:
-			post = Post(postText=postText, user="temp")
+			post = Post(postText=postText, user="temp", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
 
