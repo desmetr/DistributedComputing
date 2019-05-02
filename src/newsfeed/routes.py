@@ -14,8 +14,11 @@ def newsfeed():
 	# Get all comments
 	allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
 
+	# Get all photos
+	allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).json()
+
 	# Get all advertisements
 	advertisements = []
 
 	# Show list
-	return render_template("newsfeed.html", posts=allPosts, comments=allComments, advertisements=advertisements)
+	return render_template("newsfeed.html", posts=allPosts, comments=allComments, photos=allPhotos, advertisements=advertisements)

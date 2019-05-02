@@ -12,5 +12,7 @@ URLS = {
 	
 	'profanity_url': 				'http://localhost:5004/profanity',
 
-	'garden_url': 					'http://localhost:5005/garden'
+	'garden_url': 					'http://localhost:5005/garden',
+
+	'all_photos_url':				'http://localhost:5008/photo/all'
 }

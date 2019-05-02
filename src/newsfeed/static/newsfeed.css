@@ -9,7 +9,11 @@
 }
 
 .left {
-	width: 75%;
+	width: 50%;
+}
+
+.middle {
+	width: 25%;
 }
 
 .right {
