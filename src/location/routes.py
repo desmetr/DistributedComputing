@@ -57,42 +57,50 @@ def showOthersOnMap():
 	locationScript = locationScriptStart.read()
 	locationScriptStart.close()
 
+	currentVegetables = ['potato', 'tomato']
+	currentFruits = ['apple', 'strawberry']
+	currentHerbs = ['basilicum']
+
 	for _, address in enumerate(addresses):
 		lat = address[2]
 		lng = address[3]
 
-		locationScript += """
-			var marker""" + str(address[0]) + """ = new google.maps.Marker({
-				position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
-			"""
+		# TODO: get garden information from current user
+		# currentVegetables = requests.get(urlsConfig.URLS['vegetables_url'] + "/" str(address[0]))
+		# currentFruits = requests.get(urlsConfig.URLS['fruits_url'] + "/" str(address[0]))
+		# currentHerbs = requests.get(urlsConfig.URLS['herbs_url'] + "/" str(address[0]))
+
+		# locationScript += """
+		# 	var marker""" + str(address[0]) + """ = new google.maps.Marker({
+		# 		position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
+		# 	"""
 		
-		if not IN_RADIUS:
-			locationScript += """
-				map: map,
-				"""
+		# if not IN_RADIUS:
+		# 	locationScript += """
+		# 		map: map,
+		# 		"""
 
 		if ICON:
 			locationScript += """
 				icon: '""" + address[4] + """',
 				"""
 
-		contentString = "User: " + address[1]
-		contentString += '\t<a href="' + urlsConfig.URLS['single_user_url'] + str(address[0]) + '">Go To User</a> '
-		contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '">Chat With User</a>'
-		# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a>'
-
+		contentString = getContentString(address, currentVegetables, currentFruits, currentHerbs)
+				
+		# label: '""" + address[1] + """'});
 		locationScript += """
-				label: '""" + address[1] + """'});
-
+			var contentString = """ + contentString + """;
 			var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
-				content: '""" + contentString + """'
-			})
-
-			marker""" + str(address[0]) + """.addListener('click', function() {
-				infoWindow""" + str(address[0]) + """.open(map, marker""" + str(address[0]) + """)
+				position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
+				content: contentString,
+				map: map
 			})
 
 			"""
+			# marker""" + str(address[0]) + """.addListener('click', function() {
+			# 	infoWindow""" + str(address[0]) + """.open(map, marker""" + str(address[0]) + """)
+			# })
+
 		contentString = ""
 	
 		if IN_RADIUS:
@@ -143,6 +151,46 @@ def getAllAddressesFromUsers():
 
 	return addresses
 
+def getContentString(address, currentVegetables, currentFruits, currentHerbs):
+	contentString = """
+		'<div id="content">' +
+		'User: <b>""" + address[1] + """</b>' +
+		'<br>Vegetables:' +
+		'<ul>' +
+		"""
+
+	for vegetable in currentVegetables:
+		contentString += """'<li><b>""" + vegetable + """</b></li>'+"""
+
+	contentString += """
+		'</ul>'+
+		'Fruits:'+
+		'<ul>'+
+	"""
+
+	for fruit in currentFruits:			
+		contentString += """'<li><b>""" + fruit + """</b></li>'+"""
+
+	contentString += """
+		'</ul>'+
+		'Herbs:'+
+		'<ul>'+
+	"""
+
+	for herb in currentHerbs:
+		contentString += """'<li><b>""" + herb + """</b></li>'+"""
+
+	contentString += """'</ul>'+"""
+
+	# TODO correct urls
+	contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + """">Go To Garden</a> '+"""
+	# contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + str(address[0]) + """">Go To User's Garden</a> '+"""
+	contentString += """'<a href=\"""" + urlsConfig.URLS['chat_url'] + """">Chat With User</a>'+"""
+	# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a>'
+	
+	contentString += "'</div>'"
+
+	return contentString
 
 	# marker""" + str(address[0]) + """.addListener('click', function() {
 				# callbackToServer('""" + str(address[0]) + """');

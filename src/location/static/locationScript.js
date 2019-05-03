@@ -60,51 +60,66 @@ function initMap()
 			dataType: "json"
 		})
 	}
-			var marker1 = new google.maps.Marker({
-				position: {lat: 51.216948, lng: 4.696734999999999},
-			
-				map: map,
-				
-				label: 'a'});
-
+			var contentString = 
+		'<div id="content">' +
+		'User: <b>a</b>' +
+		'<br>Vegetables:' +
+		'<ul>' +
+		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		'</ul>'+
+		'Fruits:'+
+		'<ul>'+
+	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+		'</ul>'+
+		'Herbs:'+
+		'<ul>'+
+	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
 			var infoWindow1 = new google.maps.InfoWindow({
-				content: 'User: a	<a href="http://localhost:5000/user?user_id=1">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
-			})
-
-			marker1.addListener('click', function() {
-				infoWindow1.open(map, marker1)
+				position: {lat: 51.216948, lng: 4.696734999999999},
+				content: contentString,
+				map: map
 			})
 
 			
-			var marker2 = new google.maps.Marker({
-				position: {lat: 51.1845547, lng: 4.4212374},
-			
-				map: map,
-				
-				label: 'b'});
-
+			var contentString = 
+		'<div id="content">' +
+		'User: <b>b</b>' +
+		'<br>Vegetables:' +
+		'<ul>' +
+		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		'</ul>'+
+		'Fruits:'+
+		'<ul>'+
+	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+		'</ul>'+
+		'Herbs:'+
+		'<ul>'+
+	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
 			var infoWindow2 = new google.maps.InfoWindow({
-				content: 'User: b	<a href="http://localhost:5000/user?user_id=2">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
-			})
-
-			marker2.addListener('click', function() {
-				infoWindow2.open(map, marker2)
-			})
-
-			
-			var marker3 = new google.maps.Marker({
 				position: {lat: 51.1845547, lng: 4.4212374},
-			
-				map: map,
-				
-				label: 'g'});
-
-			var infoWindow3 = new google.maps.InfoWindow({
-				content: 'User: g	<a href="http://localhost:5000/user?user_id=3">Go To User</a> <a href="http://localhost:5006/chat">Chat With User</a>'
+				content: contentString,
+				map: map
 			})
 
-			marker3.addListener('click', function() {
-				infoWindow3.open(map, marker3)
+			
+			var contentString = 
+		'<div id="content">' +
+		'User: <b>g</b>' +
+		'<br>Vegetables:' +
+		'<ul>' +
+		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		'</ul>'+
+		'Fruits:'+
+		'<ul>'+
+	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+		'</ul>'+
+		'Herbs:'+
+		'<ul>'+
+	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
+			var infoWindow3 = new google.maps.InfoWindow({
+				position: {lat: 51.1845547, lng: 4.4212374},
+				content: contentString,
+				map: map
 			})
 
 				}
