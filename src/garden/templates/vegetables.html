@@ -6,17 +6,17 @@
     <div class="card-body">
 
         <div class="row">
-            {% for hmm in vegetableItems %}
+            {% for item in vegItems %}
             <div class="col-sm">
                 <div class="card" style="width: 18rem;">
-                    <img src="{{  url_for('static', filename='img/logo.png') }}" class="card-img-top" alt="...">
+                    <img src="img/logo.png" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">{{ hmm.item_name }}</h5>
-                        <p class="card-text">{{ hmm.item_type }}</p>
+                        <h5 class="card-title">{{ item}}</h5>
                         <a href="#" class="btn btn-primary">View</a>
                     </div>
                 </div>
             </div>
+
             {% endfor %}
 
         </div>

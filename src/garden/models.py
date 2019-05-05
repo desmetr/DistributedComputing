@@ -3,12 +3,14 @@ from garden import db
 
 
 class Garden(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    item_type=db.Column(db.String(20))
-    item_name=db.Column(db.String(120))
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    vegetable = db.Column(db.String(20))
+    fruits = db.Column(db.String(120))
+    User_id = db.Column(db.Integer)
+
 
     def __repr__(self):
-        return f"garden('{self.item_type}','{self.item_name}')"
+        return f"garden('{self.vegetable}','{self.fruits}')"
 
 
 
