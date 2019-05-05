@@ -6,14 +6,17 @@
     <div class="card-body">
 
         <div class="row">
-            {% for fru in fruitItems %}
+            {% for fru in fruCount %}
             <div class="col-sm">
                 <div class="card" style="width: 18rem;">
                     <img src="img/logo.png" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">{{ fru }}</h5>
+                        <h5 class="card-title">{{ fru.fruits }}</h5>
                         <a href="#" class="btn btn-primary">View</a>
                     </div>
+                    <button type="button" class="btn btn-primary">
+                        Count <span class="badge badge-light">{{fru[1]}}</span>
+                    </button>
                 </div>
             </div>
             {% endfor %}
