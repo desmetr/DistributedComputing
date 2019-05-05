@@ -9,13 +9,13 @@
             {% for fru in fruCount %}
             <div class="col-sm">
                 <div class="card" style="width: 18rem;">
-                    <img src="img/logo.png" class="card-img-top" alt="...">
+                    <img src=http://localhost:8080/photo/{{fru.Img_id}} class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ fru.fruits }}</h5>
                         <a href="#" class="btn btn-primary">View</a>
                     </div>
                     <button type="button" class="btn btn-primary">
-                        Count <span class="badge badge-light">{{fru[1]}}</span>
+                        Count <span class="badge badge-light">{{fru[2]}}</span>
                     </button>
                 </div>
             </div>

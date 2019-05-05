@@ -16,9 +16,8 @@ def vegetable(User_id):
     vegetableItems = []
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         vegetableItems.append(row.vegetable)
-
-    vegetableCo = Garden.query.with_entities(Garden.vegetable,func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
-    print(vegetableCo)
+    vegetableCo = Garden.query.with_entities(Garden.vegetable, Garden.Img_id, func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
+    #vegetableCo = Garden.query.with_entities(Garden.vegetable,func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
 
     return(render_template('vegetables.html',title="vegetables", vegCount = vegetableCo, vegItems = vegetableItems))
 
@@ -27,7 +26,7 @@ def fruits(User_id):
     fruitItems = []
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         fruitItems.append(row.fruits)
-    fruitsCount = Garden.query.with_entities(Garden.fruits,func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
-    print(fruitsCount)
+    fruitsCount = Garden.query.with_entities(Garden.fruits, Garden.Img_id, func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
+    #fruitsCount = Garden.query.with_entities(Garden.fruits,func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
     return (render_template('fruits.html', title="fruits",fruCount=fruitsCount, fruitItems=fruitItems))
 

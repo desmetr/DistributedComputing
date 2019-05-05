@@ -7,7 +7,7 @@ class Garden(db.Model):
     vegetable = db.Column(db.String(20))
     fruits = db.Column(db.String(120))
     User_id = db.Column(db.Integer)
-
+    Img_id = db.Column(db.Integer)
 
     def __repr__(self):
         return f"garden('{self.vegetable}','{self.fruits}')"
