@@ -65,15 +65,15 @@ function initMap()
 		'User: <b>a</b>' +
 		'<br>Vegetables:' +
 		'<ul>' +
-		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		'<li><b>tomato</b> (1)</li>'+
 		'</ul>'+
 		'Fruits:'+
 		'<ul>'+
-	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+	'<li><b>apple</b> (1)</li>'+
 		'</ul>'+
 		'Herbs:'+
 		'<ul>'+
-	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
+	'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a>'+'<a href="http://localhost:5006/chat">Chat With User</a>'+'<a href="http://localhost:5000/friendship?other_user=1>Become Friends</a>'+'</div>';
 			var infoWindow1 = new google.maps.InfoWindow({
 				position: {lat: 51.216948, lng: 4.696734999999999},
 				content: contentString,
@@ -86,15 +86,15 @@ function initMap()
 		'User: <b>b</b>' +
 		'<br>Vegetables:' +
 		'<ul>' +
-		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		
 		'</ul>'+
 		'Fruits:'+
 		'<ul>'+
-	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+	
 		'</ul>'+
 		'Herbs:'+
 		'<ul>'+
-	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
+	'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a>'+'<a href="http://localhost:5006/chat">Chat With User</a>'+'<a href="http://localhost:5000/friendship?other_user=2>Become Friends</a>'+'</div>';
 			var infoWindow2 = new google.maps.InfoWindow({
 				position: {lat: 51.1845547, lng: 4.4212374},
 				content: contentString,
@@ -107,15 +107,15 @@ function initMap()
 		'User: <b>g</b>' +
 		'<br>Vegetables:' +
 		'<ul>' +
-		'<li><b>potato</b></li>'+'<li><b>tomato</b></li>'+
+		
 		'</ul>'+
 		'Fruits:'+
 		'<ul>'+
-	'<li><b>apple</b></li>'+'<li><b>strawberry</b></li>'+
+	
 		'</ul>'+
 		'Herbs:'+
 		'<ul>'+
-	'<li><b>basilicum</b></li>'+'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a> '+'<a href="http://localhost:5006/chat">Chat With User</a>'+'</div>';
+	'</ul>'+'	<a href="http://localhost:5005/garden">Go To Garden</a>'+'<a href="http://localhost:5006/chat">Chat With User</a>'+'<a href="http://localhost:5000/friendship?other_user=3>Become Friends</a>'+'</div>';
 			var infoWindow3 = new google.maps.InfoWindow({
 				position: {lat: 51.1845547, lng: 4.4212374},
 				content: contentString,

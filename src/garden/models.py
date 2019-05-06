@@ -11,8 +11,3 @@ class Garden(db.Model):
 
     def __repr__(self):
         return f"garden('{self.vegetable}','{self.fruits}')"
-
-
-
-
-

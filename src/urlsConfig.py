@@ -1,6 +1,7 @@
 URLS = {
 	'users_url': 					'http://localhost:5000/users',
 	'single_user_url': 				'http://localhost:5000/user?user_id=',
+	'friendship_url':				'http://localhost:5000/friendship?other_user=',
 
 	'post_url': 					'http://localhost:5001/post',
 	'all_posts_url': 				'http://localhost:5001/getAllPosts',
