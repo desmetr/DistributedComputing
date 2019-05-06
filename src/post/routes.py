@@ -31,7 +31,6 @@ def makePost():
 	if postForm.validate_on_submit():
 		postText = postForm.postText.data
 		response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': postText})
-		# response = requests.post(profanity_url, params={'text': postText})
 
 		# Only show div is post contained a bad word
 		if response.text == "BAD":
