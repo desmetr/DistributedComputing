@@ -18,7 +18,7 @@ class User(UserMixin, loginDB.Model):
 	lng = loginDB.Column(loginDB.Float)
 
 	def __repr__(self):
-		return "<User {}>".format(self.username)
+		return "<User {}, {}>".format(self.username, self.location)
 
 	def calculateLatLng(self):
 		search_payload = {"key" : key, "query" : self.location}
@@ -46,6 +46,11 @@ class User(UserMixin, loginDB.Model):
 			"lat": self.lat,
 			"lng": self.lng,
 		}
+
+class Friendship(UserMixin, loginDB.Model):
+	id = loginDB.Column(loginDB.Integer, primary_key=True)
+	user1 = loginDB.Column(loginDB.Integer, loginDB.ForeignKey('user.id'))
+	user2 = loginDB.Column(loginDB.Integer, loginDB.ForeignKey('user.id'))
 
 @login.user_loader
 def load_user(id):

@@ -5,7 +5,7 @@ from login import loginApp, loginDB
 # from forms import LoginForm, RegistrationForm
 from login.forms import LoginForm, RegistrationForm
 # from models import User
-from login.models import User
+from login.models import User, Friendship
 from werkzeug.urls import url_parse
 import urlsConfig
 
@@ -80,7 +80,7 @@ def getSingleUser():
 		'status': 'fail',
 		'message': 'User does not exist'
 	}
-	print(user_id)
+
 	try:
 		user = User.query.filter_by(id=int(user_id)).first()
 		if not user:
@@ -99,6 +99,27 @@ def getSingleUser():
 	except ValueError:
 		return jsonify(response_object), 404
 
+@loginApp.route("/friendship", methods=["GET"])
+def friendship():
+	other_user = request.args.get('other_user')
+	print(other_user)
+	response_object = {
+		'status': 'fail',
+		'message': 'User does not exist'
+	}
+
+	# if current_user.is_authenticated:
+	friendship = Friendship(user1=1, user2=int(other_user))
+	# friendship = Friendship(user1=current_user, user2=int(other_user))
+
+	loginDB.session.add(friendship)
+	loginDB.session.commit()
+
+		# return 200
+	# else:
+	# 	return jsonify(response_object), 404
+
+	return "OK"
 
 if __name__ == "__main__":
 	loginApp.run(debug=True)

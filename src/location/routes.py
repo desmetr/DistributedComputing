@@ -57,10 +57,6 @@ def showOthersOnMap():
 	locationScript = locationScriptStart.read()
 	locationScriptStart.close()
 
-	# currentVegetables = ['potato', 'tomato']
-	# currentFruits = ['apple', 'strawberry']
-	currentHerbs = ['basilicum']
-
 	for _, address in enumerate(addresses):
 		lat = address[2]
 		lng = address[3]
@@ -76,7 +72,6 @@ def showOthersOnMap():
 
 		contentString = getContentString(address, currentVegetables.json(), currentFruits.json(), currentHerbs.json())
 				
-		# label: '""" + address[1] + """'});
 		locationScript += """
 			var contentString = """ + contentString + """;
 			var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
@@ -124,15 +119,6 @@ def callback(id):
 def getAllAddressesFromUsers():
 	addresses = []
 
-	# {
-	# 	"id": self.id,
-	#	"username": self.username,
-	#	"email": self.email,
-	#	"location": self.location,
-	#	"lat": self.lat,
-	#	"lng": self.lng,
-	# }
-
 	response = requests.get(urlsConfig.URLS['users_url'])
 
 	for user in response.json():
@@ -172,12 +158,19 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 	contentString += """'</ul>'+"""
 
 	# TODO correct urls
-	contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + """">Go To Garden</a>'+"""
-	# contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + str(address[0]) + """">Go To User's Garden</a>'+"""
-	contentString += """'<a href=\"""" + urlsConfig.URLS['chat_url'] + """">Chat With User</a>'+"""
-	# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a>'
+	contentString += """
+		'<a href=\"""" + urlsConfig.URLS['garden_url'] + """">Go To Garden</a><br>'+
+	"""
+	# contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + str(address[0]) + """">Go To User's Garden</a><br>'+"""
 	
-	contentString += """'<a href=\"""" + urlsConfig.URLS['friendship_url'] + str(address[0]) + """>Become Friends</a>'+"""
+	contentString += """
+		'<a href=\"""" + urlsConfig.URLS['chat_url'] + """">Chat With User</a><br>'+
+	"""
+	# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a><br>'
+	
+	contentString += """
+		'<a href=\"""" + urlsConfig.URLS['friendship_url'] + str(address[0]) + """">Become Friends</a>'+
+	"""
 	
 	contentString += "'</div>'"
 
