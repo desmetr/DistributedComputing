@@ -5,6 +5,8 @@ from werkzeug.urls import url_parse
 from comment.forms import CommentForm
 import requests
 import urlsConfig
+import json
+import urllib.request
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
@@ -28,9 +30,10 @@ def newsfeed():
 			allPhotos = []
 
 			# Get all advertisements
-			# allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url'])
-			# print(allAdvertisements)
-			allAdvertisements = []
+			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
+			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
+			print("allAdvertisements")
+			print(allAdvertisements)
 
 			commentForm = CommentForm()
 

@@ -3,18 +3,17 @@ from advertising import advApp
 from advertising import advDB
 from flask import render_template, jsonify
 from sqlalchemy import func
-import base64
 import json
 from flask import send_file
 import urllib.request
 import urlsConfig
 
-@advApp.route("/getAdvertisements")
-def advertisement():
+@advApp.route("/getAdvertisements/<userName>")
+def advertisement(userName):
     #print(Advertisement.query.delete())
     #advDB.session.commit()
 
-    contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_url']).read().decode('utf-8'))
+    contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_for_user_url']+"/"+userName).read().decode('utf-8'))
     # contents = json.loads(urllib.request.urlopen("http://127.0.0.1:5002/getRecentPosts/test").read().decode('utf-8'))
     bagOfWords = {}
     tags = Advertisement.query.with_entities(Advertisement.tag).distinct().all()
@@ -39,17 +38,20 @@ def advertisement():
                 totalAmountOfWords+=1
     #print(bagOfWords)
     #print(contents)
-    advertisementJson={}
-    for key in bagOfWords.keys():
-        amountOfAds=int((float(bagOfWords[key])/float(totalAmountOfWords))*5)
-        if(amountOfAds>0):
-            advertisements = Advertisement.query.filter(Advertisement.tag==str(key)).order_by(func.random()).limit(amountOfAds).all()
-            for advertisement in advertisements:
-                print (Advertisement.serialize(advertisement))
-                advertisementJson["adv"+str(len(advertisementJson)+1)]=Advertisement.serialize(advertisement)
-    print("AdvertisementJson:")
-    print(advertisementJson)
-    return json.dumps(advertisementJson)
+    if totalAmountOfWords>0:
+        advertisementJson={}
+        for key in bagOfWords.keys():
+            amountOfAds=int((float(bagOfWords[key])/float(totalAmountOfWords))*5)
+            if(amountOfAds>0):
+                advertisements = Advertisement.query.filter(Advertisement.tag==str(key)).order_by(func.random()).limit(amountOfAds).all()
+                for advertisement in advertisements:
+                    print (Advertisement.serialize(advertisement))
+                    advertisementJson["adv"+str(len(advertisementJson)+1)]=Advertisement.serialize(advertisement)
+        print("AdvertisementJson:")
+        print(advertisementJson)
+        return json.dumps(advertisementJson)
+    else:
+        return "{}"
 
 @advApp.route("/addAdvertisement")
 def addAdvertisement():

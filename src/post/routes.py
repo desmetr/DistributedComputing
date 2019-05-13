@@ -36,7 +36,7 @@ def makePost():
 		if response.text == "BAD":
 			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='')
 		elif response.text == "GOOD":
-			post = Post(postText=postText, user="temp", timestamp=datetime.now())
+			post = Post(postText=postText, user="b", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
 
@@ -45,7 +45,7 @@ def makePost():
 
 	if postFormAfterCheck.validate_on_submit():
 		if postFormAfterCheck.submitAfterCheck.data:
-			post = Post(postText=postText, user="temp", timestamp=datetime.now())
+			post = Post(postText=postText, user="b", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
 
@@ -73,6 +73,12 @@ def makeComment():
 	response = requests.post(urlsConfig.URLS['comment_url'], params={"postID": postID})
 
 	return "OK"
+
+@postApp.route("/getAllPostsForUser/<userName>", methods=["GET"])
+def getAllPostsForUser(userName):
+	# posts = Post.query.all()
+	posts = Post.query.filter(Post.user==userName).order_by(desc(Post.timestamp)).all()
+	return jsonify([Post.serialize(post) for post in posts])
 
 @postApp.errorhandler(Exception)
 def exceptionHandler(error):
