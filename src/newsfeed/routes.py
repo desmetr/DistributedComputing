@@ -8,27 +8,38 @@ import urlsConfig
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
-	# Get all posts
-	# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-	allPosts = []
+	current_user_id = request.cookies.get("currentSessionCookie")
+	if current_user_id:
+		# Get current user information
+		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
+		if current_user_response.status_code == 200:
+			# Success!
 
-	# Get all comments
-	# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-	allComments = []
+			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
+			# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+			allPosts = []
 
-	# Get all photos
-	# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
-	allPhotos = []
+			# Get all comments
+			# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+			allComments = []
 
-	# Get all advertisements
-	allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url'])
-	print(allAdvertisements)
-	# advertisements = []
+			# Get all photos
+			# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
+			allPhotos = []
 
-	commentForm = CommentForm()
+			# Get all advertisements
+			# allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url'])
+			# print(allAdvertisements)
+			allAdvertisements = []
 
-	# Show list
-	return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=advertisements)
+			commentForm = CommentForm()
+
+			# Show list
+			return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=allAdvertisements)
+		else:
+			return redirect(urlsConfig.URLS['login_url'])
+	else:
+		return redirect(urlsConfig.URLS['login_url'])
 
 @newsfeedApp.errorhandler(Exception)
 def exceptionHandler(error):
@@ -41,6 +52,8 @@ def exceptionHandler(error):
 		errorString += " to the Photo service."
 	elif "advertisements" in repr(error).lower():
 		errorString += " to the Advertisement service."
+	elif "user" in repr(error).lower():
+		errorString += " to the Login service."
 	else:
 		errorString += "."
 	return errorString

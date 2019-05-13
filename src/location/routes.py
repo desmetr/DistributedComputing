@@ -14,13 +14,20 @@ template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "
 
 IN_RADIUS = False
 ICON = False
+current_user = None
 
 @locationApp.route("/location", methods=["GET", "POST"])
 def showOthersOnMap():
+	global current_user
+
 	# Structure of an address:
 	#	[id, username, lat, lng]
 	# can be extended to
 	#	[id, username, lat, lng, icon]
+	
+	current_user_id = request.cookies.get("currentSessionCookie")
+	# Get current user information
+	current_user = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id)).json()
 
 	addresses = getAllAddressesFromUsers()
 
@@ -98,6 +105,8 @@ def getAllAddressesFromUsers():
 	return addresses
 
 def getContentString(address, currentVegetables, currentFruits, currentHerbs):
+	global current_user
+
 	contentString = """
 		'<div id="content">' +
 		'User: <b>""" + address[1] + """</b>' +
@@ -128,20 +137,27 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 
 	contentString += """'</ul>'+"""
 
-	# TODO correct urls
+	# TODO correct url
 	contentString += """
 		'<a href=\"""" + urlsConfig.URLS['garden_url'] + """">Go To Garden</a><br>'+
 	"""
 	# contentString += """'\t<a href=\"""" + urlsConfig.URLS['garden_url'] + str(address[0]) + """">Go To User's Garden</a><br>'+"""
 	
+	# TODO correct url
 	contentString += """
 		'<a href=\"""" + urlsConfig.URLS['chat_url'] + """">Chat With User</a><br>'+
 	"""
 	# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a><br>'
 	
-	contentString += """
-		'<a href=\"""" + urlsConfig.URLS['friendship_url'] + str(address[0]) + """">Become Friends</a>'+
-	"""
+	friendshipExist = requests.get(urlsConfig.URLS['friendship_exists_url'] + current_user.id + "&user2=" + str(address[0]))
+	if friendshipExist:
+		contentString += """
+			'<a href=\"""" + urlsConfig.URLS['unfriend_url'] + str(address[0]) + """">Unfriend</a>' +
+		"""
+	else:
+		contentString += """
+			'<a href=\"""" + urlsConfig.URLS['friendship_url'] + str(address[0]) + """">Become Friends</a>'+
+		"""
 	
 	contentString += "'</div>'"
 
