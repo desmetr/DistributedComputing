@@ -1,9 +1,10 @@
-from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_uploads import UploadSet, IMAGES
 from photo import photoApp, photoDB
 from photo.forms import PhotoForm
 from photo.models import Photo
+from photo.config import Config
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 import os
@@ -46,3 +47,6 @@ def showOnePhoto(id):
 def showAllPhotos():
 	photos = Photo.query.all()
 	return jsonify([Photo.serialize(photo) for photo in photos])
+	# photo = Photo.query.filter_by(id=1).first()
+	# return send_from_directory(Config.STATIC_FOLDER, photo.filename, as_attachment=True)
+	# return photo.url

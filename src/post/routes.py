@@ -73,3 +73,14 @@ def makeComment():
 	response = requests.post(urlsConfig.URLS['comment_url'], params={"postID": postID})
 
 	return "OK"
+
+@postApp.errorhandler(Exception)
+def exceptionHandler(error):
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "profanity" in repr(error):
+		errorString += " to the Cyber Bullying service."
+	elif "comment" in repr(error):
+		errorString += " to the Comment service."
+	else:
+		errorString += "."
+	return errorString

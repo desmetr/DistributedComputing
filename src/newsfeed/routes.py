@@ -18,7 +18,7 @@ def newsfeed():
 	# allComments = []
 
 	# Get all photos
-	# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).json()
+	# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
 	allPhotos = []
 
 	# Get all advertisements
@@ -28,3 +28,17 @@ def newsfeed():
 
 	# Show list
 	return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=advertisements)
+
+@newsfeedApp.errorhandler(Exception)
+def exceptionHandler(error):
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "getAllPosts" in repr(error):
+		errorString += " to the Post service."
+	elif "getCommentsAllPosts" in repr(error):
+		errorString += " to the Comment service."
+	elif "photo/all" in repr(error):
+		errorString += " to the Photo service."
+	else:
+		errorString += "."
+	# Add advertisements
+	return errorString

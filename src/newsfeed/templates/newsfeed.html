@@ -41,7 +41,8 @@
             {% if photos %}
                 {% for photo in photos %}
                     {{ photo.user }}'s photo
-                    <img src="{{ url_for('static', filename=photo.filename) }}" alt="{{ photo.filename }}">
+                    <!-- <img src="{{ url_for('static', filename=photo.filename) }}" alt="{{ photo.filename }}"> -->
+                    <img src="{{ photo }}" alt="{{ photo.filename }}">
                     <form action="http://localhost:5002/comment" method="POST">
                         <input type="hidden" name="postID" value={{ photo.id }}>
                         <input type="submit" name="addComment" value="Add Comment">

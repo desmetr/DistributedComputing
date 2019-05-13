@@ -67,3 +67,13 @@ def getCommentsOfAllPosts():
 	# comments = Comment.query.all()
 	comments = Comment.query.order_by(desc(Comment.timestamp)).all()
 	return jsonify([Comment.serialize(comment) for comment in comments])
+
+@commentApp.errorhandler(Exception)
+def exceptionHandler(error):
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "profanity" in repr(error):
+		errorString += " to the Cyber Bullying service."
+	else:
+		errorString += "."
+	# Add advertisements
+	return errorString

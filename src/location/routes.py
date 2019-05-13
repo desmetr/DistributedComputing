@@ -15,36 +15,7 @@ template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "
 IN_RADIUS = False
 ICON = False
 
-@locationApp.route("/location", methods=["GET"])
-def layout():
-	form = LocationForm()
-	return render_template("layout.html", form=form)
-
-@locationApp.route("/sendRequestMap/<string:query>")
-def resultsMap(query):
-	current_embed_url = template_embed_url + query
-	return '<iframe width="600" height="450" frameborder="0" style="border:0" src="' + current_embed_url + '"allowfullscreen></iframe>'
-
-@locationApp.route("/sendRequestPhoto/<string:query>")
-def resultsPhoto(query):
-	search_payload = {"key" : key, "query" : query}
-	search_request = requests.get(search_url, params=search_payload)
-	search_json = search_request.json()
-
-	photo_id = search_json["results"][0]["photos"][0]["photo_reference"]
-
-	photo_payload = {"key" : key, "maxwidth" : 500, "maxheight" : 500, "photoreference" : photo_id}
-	photo_request = requests.get(photos_url, params=photo_payload)
-	
-	photo_type = imghdr.what("", photo_request.content)
-	photo_name = "static/" + query + "." + photo_type
-
-	with open(photo_name, "wb") as photo:
-		photo.write(photo_request.content)
-
-	return "<img src=" + photo_name + ">"
-
-@locationApp.route("/sendRequestOthers", methods=["GET", "POST"])
+@locationApp.route("/location", methods=["GET", "POST"])
 def showOthersOnMap():
 	# Structure of an address:
 	#	[id, username, lat, lng]
@@ -175,3 +146,14 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 	contentString += "'</div>'"
 
 	return contentString
+
+@locationApp.errorhandler(Exception)
+def exceptionHandler(error):
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "garden" in repr(error):
+		errorString += " to the Garden service."
+	elif "user" in repr(error):
+		errorString += " to the Login service."
+	else:
+		errorString += "."
+	return errorString
