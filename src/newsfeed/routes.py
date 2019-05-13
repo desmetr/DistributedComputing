@@ -4,25 +4,26 @@ from newsfeed import newsfeedApp
 from werkzeug.urls import url_parse
 from comment.forms import CommentForm
 import requests
-import random
 import urlsConfig
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
 	# Get all posts
-	allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-	# allPosts = []
+	# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+	allPosts = []
 
 	# Get all comments
-	allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-	# allComments = []
+	# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+	allComments = []
 
 	# Get all photos
 	# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
 	allPhotos = []
 
 	# Get all advertisements
-	advertisements = []
+	allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url'])
+	print(allAdvertisements)
+	# advertisements = []
 
 	commentForm = CommentForm()
 
@@ -32,13 +33,14 @@ def newsfeed():
 @newsfeedApp.errorhandler(Exception)
 def exceptionHandler(error):
 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "getAllPosts" in repr(error):
+	if "post" in repr(error).lower():
 		errorString += " to the Post service."
-	elif "getCommentsAllPosts" in repr(error):
+	elif "comment" in repr(error).lower():
 		errorString += " to the Comment service."
-	elif "photo/all" in repr(error):
+	elif "photo" in repr(error).lower():
 		errorString += " to the Photo service."
+	elif "advertisements" in repr(error).lower():
+		errorString += " to the Advertisement service."
 	else:
 		errorString += "."
-	# Add advertisements
 	return errorString

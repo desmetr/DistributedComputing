@@ -77,9 +77,9 @@ def makeComment():
 @postApp.errorhandler(Exception)
 def exceptionHandler(error):
 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "profanity" in repr(error):
+	if "profanity" in repr(error).lower():
 		errorString += " to the Cyber Bullying service."
-	elif "comment" in repr(error):
+	elif "comment" in repr(error).lower():
 		errorString += " to the Comment service."
 	else:
 		errorString += "."

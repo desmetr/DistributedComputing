@@ -150,9 +150,9 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 @locationApp.errorhandler(Exception)
 def exceptionHandler(error):
 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "garden" in repr(error):
+	if "garden" in repr(error).lower():
 		errorString += " to the Garden service."
-	elif "user" in repr(error):
+	elif "user" in repr(error).lower():
 		errorString += " to the Login service."
 	else:
 		errorString += "."

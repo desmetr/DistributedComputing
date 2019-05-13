@@ -7,13 +7,15 @@ import base64
 import json
 from flask import send_file
 import urllib.request
+import urlsConfig
 
-@advApp.route("/")
+@advApp.route("/getAdvertisements")
 def advertisement():
     #print(Advertisement.query.delete())
     #advDB.session.commit()
 
-    contents = json.loads(urllib.request.urlopen("http://127.0.0.1:5002/getRecentPosts/test").read().decode('utf-8'))
+    contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_url']).read().decode('utf-8'))
+    # contents = json.loads(urllib.request.urlopen("http://127.0.0.1:5002/getRecentPosts/test").read().decode('utf-8'))
     bagOfWords = {}
     tags = Advertisement.query.with_entities(Advertisement.tag).distinct().all()
     totalAmountOfWords=0

@@ -17,5 +17,7 @@ URLS = {
 
 	'chat_url':						'http://localhost:5006/chat',
 
-	'all_photos_url':				'http://localhost:5008/photo/all'
+	'all_photos_url':				'http://localhost:5008/photo/all',
+
+	'advertisements_url':			'http://localhost:5009/getAdvertisements'
 }
