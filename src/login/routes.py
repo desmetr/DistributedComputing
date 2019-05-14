@@ -24,7 +24,9 @@ def login():
 
 		login_user(user, remember=form.remember_me.data)
 		
+		# TODO: redirect where?
 		response = redirect(urlsConfig.URLS['newsfeed_url'])
+		# response = redirect(urlsConfig.URLS['location_url'])
 		response.set_cookie("currentSessionCookie", str(user.id))
 		return response	
 
@@ -96,42 +98,42 @@ def friendship():
 	}
 
 	# if current_user.is_authenticated:
-	if current_user.id != other_user:
+	if current_user.id != other_user_id:
 		friendship = Friendship(user1=current_user.id, user2=other_user_id)
 
 		loginDB.session.add(friendship)
 		loginDB.session.commit()
 
 	response = redirect(urlsConfig.URLS['location_url'])
-	response.set_cookie("currentSessionCookie", str(user.id))
+	response.set_cookie("currentSessionCookie", str(current_user.id))
 	return response	
 
 @loginApp.route("/unfriend", methods=["GET"])
 def unfriend():
 	other_user_id = int(request.args.get('other_user'))
 
-	if current_user.id != other_user:
-		friendship = Friendship.query.filter_by(user1=user).filter_by(user2=user2).first()
+	if current_user.id != other_user_id:
+		friendship = Friendship.query.filter_by(user1=current_user.id).filter_by(user2=other_user_id).first()
 
 		loginDB.session.delete(friendship)
 		loginDB.session.commit()
 
 	response = redirect(urlsConfig.URLS['location_url'])
-	response.set_cookie("currentSessionCookie", str(user.id))
+	response.set_cookie("currentSessionCookie", str(current_user.id))
 	return response	
 
 @loginApp.route("/getFriendship", methods=["GET"])
 def getFriendship():
-	user1 = request.args.get('user1')
-	user2 = request.args.get('user2')
+	user_id_1 = request.args.get('user1')
+	user_id_2 = request.args.get('user2')
 
-	if user1 != user2:
-		friendship = Friendship.query.filter_by(user1=user).filter_by(user2=user2).first()
+	if user_id_1 != user_id_2:
+		friendship = Friendship.query.filter_by(user1=user_id_1).filter_by(user2=user_id_2).first()
 		if friendship:
 			print("Friendship exists already")
-			return True
+			return "OK"
 	else:
-		return False
+		return "NOK"
 
 if __name__ == "__main__":
 	loginApp.run(debug=True)

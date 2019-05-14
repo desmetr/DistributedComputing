@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, redirect
+from flask import Flask, render_template, jsonify, redirect, request
 from location.key import key
 from location import locationApp
 from location.forms import LocationForm
@@ -26,65 +26,71 @@ def showOthersOnMap():
 	#	[id, username, lat, lng, icon]
 	
 	current_user_id = request.cookies.get("currentSessionCookie")
-	# Get current user information
-	current_user = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id)).json()
+	if current_user_id:
+		# Get current user information
+		current_user = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id)).json()['data']
 
-	addresses = getAllAddressesFromUsers()
+		addresses = getAllAddressesFromUsers()
 
-	locationScriptStart = open("static/locationScriptStart.js", "r")
-	locationScript = locationScriptStart.read()
-	locationScriptStart.close()
+		locationScriptStart = open("static/locationScriptStart.js", "r")
+		locationScript = locationScriptStart.read()
+		locationScriptStart.close()
 
-	for _, address in enumerate(addresses):
-		lat = address[2]
-		lng = address[3]
+		for _, address in enumerate(addresses):
+			# Don't wanna see yourself, so excluded.
+			print(current_user['id'] != address[0])
+			if current_user['id'] != address[0]:
+				lat = address[2]
+				lng = address[3]
 
-		currentVegetables = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
-		currentFruits = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
-		currentHerbs = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
+				currentVegetables = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
+				currentFruits = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
+				currentHerbs = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
 
-		if ICON:
-			locationScript += """
-				icon: '""" + address[4] + """',
-				"""
+				if ICON:
+					locationScript += """
+						icon: '""" + address[4] + """',
+						"""
 
-		contentString = getContentString(address, currentVegetables.json(), currentFruits.json(), currentHerbs.json())
-				
-		locationScript += """
-			var contentString = """ + contentString + """;
-			var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
-				position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
-				content: contentString,"""
+				contentString = getContentString(address, currentVegetables.json(), currentFruits.json(), currentHerbs.json())
+						
+				locationScript += """
+					var contentString = """ + contentString + """;
+					var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
+						position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
+						content: contentString,"""
 
-		if not IN_RADIUS:
-			locationScript += """
-				map: map,
-				"""
+				if not IN_RADIUS:
+					locationScript += """
+						map: map,
+						"""
 
-		locationScript += """
-			})
+				locationScript += """
+					})
 
-			"""
+					"""
 
-		contentString = ""
-	
-		if IN_RADIUS:
-			locationScript += """
-				if (checkRadius(currentPso.lat, currentPos.lng, """ + str(lat) + """, """ + str(lng) + """, zoomLevel))
-					marker""" + str(address[0]) + """.setMap(null);
-				else
-					marker""" + str(address[0]) + """.setMap(map);
-			"""
+				contentString = ""
+			
+				if IN_RADIUS:
+					locationScript += """
+						if (checkRadius(currentPso.lat, currentPos.lng, """ + str(lat) + """, """ + str(lng) + """, zoomLevel))
+							marker""" + str(address[0]) + """.setMap(null);
+						else
+							marker""" + str(address[0]) + """.setMap(map);
+					"""
 
-	locationScriptEnd = open("static/locationScriptEnd.js", "r")
-	locationScript += locationScriptEnd.read()
-	locationScriptEnd.close()
+		locationScriptEnd = open("static/locationScriptEnd.js", "r")
+		locationScript += locationScriptEnd.read()
+		locationScriptEnd.close()
 
-	f = open("static/locationScript.js", "w+")
-	f.write(locationScript)
-	f.close()
-	
-	return render_template("location.html")
+		f = open("static/locationScript.js", "w+")
+		f.write(locationScript)
+		f.close()
+
+		return render_template("location.html")
+	else:
+		return redirect(urlsConfig.URLS['login_url'])
 
 @locationApp.route("/callback/<id>", methods=["GET", "POST", "OPTIONS"])
 def callback(id):
@@ -149,7 +155,7 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 	"""
 	# contentString += '<a href="' + urlsConfig.URLS['chat_url'] + '/' + str(address[0]) + '">Chat With User</a><br>'
 	
-	friendshipExist = requests.get(urlsConfig.URLS['friendship_exists_url'] + current_user.id + "&user2=" + str(address[0]))
+	friendshipExist = requests.get(urlsConfig.URLS['friendship_exists_url'] + str(current_user['id']) + "&user2=" + str(address[0]))
 	if friendshipExist:
 		contentString += """
 			'<a href=\"""" + urlsConfig.URLS['unfriend_url'] + str(address[0]) + """">Unfriend</a>' +
@@ -163,13 +169,13 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 
 	return contentString
 
-@locationApp.errorhandler(Exception)
-def exceptionHandler(error):
-	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "garden" in repr(error).lower():
-		errorString += " to the Garden service."
-	elif "user" in repr(error).lower():
-		errorString += " to the Login service."
-	else:
-		errorString += "."
-	return errorString
+# @locationApp.errorhandler(Exception)
+# def exceptionHandler(error):
+# 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+# 	if "garden" in repr(error).lower():
+# 		errorString += " to the Garden service."
+# 	elif "user" in repr(error).lower():
+# 		errorString += " to the Login service."
+# 	else:
+# 		errorString += "."
+# 	return errorString

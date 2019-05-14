@@ -60,35 +60,7 @@ function initMap()
 			dataType: "json"
 		})
 	}
-			var contentString = 
-		'<div id="content">' +
-		'User: <b>b</b>' +
-		'<br>Vegetables:' +
-		'<ul>' +
-		
-		'</ul>'+
-		'Fruits:'+
-		'<ul>'+
-	
-		'</ul>'+
-		'Herbs:'+
-		'<ul>'+
-	'</ul>'+
-		'<a href="http://localhost:5005/garden">Go To Garden</a><br>'+
-	
-		'<a href="http://localhost:5006/chat">Chat With User</a><br>'+
-	
-		'<a href="http://localhost:5000/friendship?other_user=2">Become Friends</a>'+
-	'</div>';
-			var infoWindow2 = new google.maps.InfoWindow({
-				position: {lat: 51.21331439999999, lng: 4.4500289},
-				content: contentString,
-				map: map,
-				
-			})
-
-			
-			var contentString = 
+					var contentString = 
 		'<div id="content">' +
 		'User: <b>c</b>' +
 		'<br>Vegetables:' +
@@ -106,16 +78,16 @@ function initMap()
 	
 		'<a href="http://localhost:5006/chat">Chat With User</a><br>'+
 	
-		'<a href="http://localhost:5000/friendship?other_user=3">Become Friends</a>'+
-	'</div>';
-			var infoWindow3 = new google.maps.InfoWindow({
-				position: {lat: 51.1845547, lng: 4.4212374},
-				content: contentString,
-				map: map,
-				
-			})
+			'<a href="http://localhost:5000/friendship?other_user=3">Become Friends</a>'+
+		'</div>';
+					var infoWindow3 = new google.maps.InfoWindow({
+						position: {lat: 51.1845547, lng: 4.4212374},
+						content: contentString,
+						map: map,
+						
+					})
 
-				}
+						}
 	else
 	{
 		// Browser doesn't support Geolocation
