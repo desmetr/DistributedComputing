@@ -70,8 +70,10 @@
             {% if advertisements %}
                 {% for advertisement in advertisements %}
                     <p>
-                        {{ advertisement.id }}
+                        {{advertisement.text}} For more check: <a href={{advertisement.source_url}}>Potatoes</a>
                     </p>
+
+                    <img src="data:image/png;base64,{{advertisement.img}}" alt="Potatoes" />
             {% endfor %}
             {% else %}
                 Place your advertisements here.

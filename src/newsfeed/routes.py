@@ -31,9 +31,10 @@ def newsfeed():
 
 			# Get all advertisements
 			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
-			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
+			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read())
+			#allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
 			print("allAdvertisements")
-			print(allAdvertisements)
+			print(len(allAdvertisements))
 
 			commentForm = CommentForm()
 

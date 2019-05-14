@@ -7,19 +7,25 @@ import json
 from flask import send_file
 import urllib.request
 import urlsConfig
+import base64
+from advertising.forms import AdvertisementForm
 
 @advApp.route("/getAdvertisements/<userName>")
 def advertisement(userName):
     #print(Advertisement.query.delete())
     #advDB.session.commit()
+    
+    print(Advertisement.query.all())
 
     contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_for_user_url']+"/"+userName).read().decode('utf-8'))
-    # contents = json.loads(urllib.request.urlopen("http://127.0.0.1:5002/getRecentPosts/test").read().decode('utf-8'))
     bagOfWords = {}
     tags = Advertisement.query.with_entities(Advertisement.tag).distinct().all()
+    print("tags")
+    print(tags)
     totalAmountOfWords=0
     for tag in tags:
         bagOfWords[tag[0]]=0
+    print(bagOfWords)
     for post in contents:
         for word in str(post["postText"]).split():
             print("Looking at: " + word)
@@ -39,23 +45,36 @@ def advertisement(userName):
     #print(bagOfWords)
     #print(contents)
     if totalAmountOfWords>0:
-        advertisementJson={}
+        advertisementJson=[]
         for key in bagOfWords.keys():
             amountOfAds=int((float(bagOfWords[key])/float(totalAmountOfWords))*5)
             if(amountOfAds>0):
                 advertisements = Advertisement.query.filter(Advertisement.tag==str(key)).order_by(func.random()).limit(amountOfAds).all()
                 for advertisement in advertisements:
                     print (Advertisement.serialize(advertisement))
-                    advertisementJson["adv"+str(len(advertisementJson)+1)]=Advertisement.serialize(advertisement)
+                    advertisementJson.append(Advertisement.serialize(advertisement))
         print("AdvertisementJson:")
         print(advertisementJson)
         return json.dumps(advertisementJson)
     else:
         return "{}"
 
-@advApp.route("/addAdvertisement")
+
+@advApp.route("/advertisement",  methods=["GET", "POST"])
 def addAdvertisement():
-    advertisement = Advertisement(tag="Potatoes".lower(), text="Potatoes like you've never seen before!", source_url="https://en.wikipedia.org/wiki/Potato")
-    advDB.session.add(advertisement)
-    advDB.session.commit()
-    return "Advertisement added!"
+    adForm = AdvertisementForm()
+    print("Checking form")
+    if adForm.validate_on_submit():
+        print("valid")
+        flash("Successfully created an advertisement!")
+    else:
+        print("invalid")
+        return render_template("advertising.html", title="Advertisement", adForm=adForm)
+
+    #img=""
+    #with open("static/img/Growing-Potatoes-Commercially.png", "rb") as image_file:
+    #    img= base64.b64encode(image_file.read()).decode('utf-8')
+    #advertisement = Advertisement(tag="Potatoes".lower(), text="Potatoes like you've never seen before!", source_url="https://en.wikipedia.org/wiki/Potato",img=img)
+    #advDB.session.add(advertisement)
+    #advDB.session.commit()
+    #return "Advertisement added!"
