@@ -2,7 +2,8 @@
 {% block content %}
 
 <h1>Create Advertisement</h1>
-    <form action="" method="post" novalidate>
+    <form action="" method="post" enctype = "multipart/form-data">
+        {{adForm.hidden_tag()}}
         <p>{{adForm.advertisementText.label}}{{adForm.advertisementText}}</p>
         <p>{{adForm.tag.label}}{{adForm.tag}}</p>
         <p>{{adForm.source.label}}{{adForm.source}}</p>

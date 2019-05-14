@@ -10,6 +10,10 @@ import urlsConfig
 import base64
 from advertising.forms import AdvertisementForm
 
+import os
+import io
+from PIL import Image
+
 @advApp.route("/getAdvertisements/<userName>")
 def advertisement(userName):
     #print(Advertisement.query.delete())
@@ -66,10 +70,13 @@ def addAdvertisement():
     print("Checking form")
     if adForm.validate_on_submit():
         print("valid")
-        flash("Successfully created an advertisement!")
-    else:
-        print("invalid")
-        return render_template("advertising.html", title="Advertisement", adForm=adForm)
+
+        newAd = Advertisement(tag=str(adForm.tag.data).lower(),text=adForm.advertisementText.data,source_url=adForm.source.data,img=base64.b64encode(adForm.image.data.read()).decode('utf-8'))
+        advDB.session.add(newAd)
+        advDB.session.commit()
+        return "Ad has been added correctly!"
+        
+    return render_template("advertising.html", title="Advertisement", adForm=adForm)
 
     #img=""
     #with open("static/img/Growing-Potatoes-Commercially.png", "rb") as image_file:
