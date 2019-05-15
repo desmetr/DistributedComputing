@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends "header.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag()}}
+            {{ form.csrf_token()}}
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4"> Grocery </legend>
+                <dir class = "form-group">
+                    {{ form.vegetable.label(class="form-control-label")}}
+                    {% if form.vegetable.errors %}
+                        {{ form.vegetable(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.vegetable.errors %}
+                                <span> {{ error }} </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.vegetable(class="form-control form-control-lg")}}
+                    {% endif %}
+                </dir>
+                <dir class = "form-group">
+                    {{ form.fruits.label(class="form-control-label")}}
+                    {% if form.fruits.errors %}
+                        {{ form.fruits(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.fruits.errors %}
+                                <span> {{ error }} </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.fruits(class="form-control form-control-lg")}}
+                    {% endif %}
+                </dir>
+                <dir class = "form-group">
+                    {{ form.herbs.label(class="form-control-label")}}
+                    {% if form.herbs.errors %}
+                        {{ form.herbs(class="form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.herbs.errors %}
+                                <span> {{ error }} </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.herbs(class="form-control form-control-lg")}}
+                    {% endif %}
+                </dir>
+            </fieldset>
+            <div class="form-group">
+                {{ form.add() }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
