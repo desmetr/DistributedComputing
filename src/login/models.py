@@ -52,6 +52,16 @@ class Friendship(UserMixin, loginDB.Model):
 	user1 = loginDB.Column(loginDB.Integer, loginDB.ForeignKey('user.id'))
 	user2 = loginDB.Column(loginDB.Integer, loginDB.ForeignKey('user.id'))
 
+	def __repr__(self):
+		return "<Friendship {}, {}>".format(self.user1, self.user2)
+
+	def serialize(self):
+		return {
+			"id": self.id,
+			"user1": self.user1,
+			"user2": self.user2
+		}
+
 @login.user_loader
 def load_user(id):
 	return User.query.get(int(id))
