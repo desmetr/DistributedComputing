@@ -33,7 +33,7 @@ def herbs(User_id):
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         herbItems.append(row.herbs)
     herbCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).filter(Garden.User_id == User_id).all()
-    return (render_template('herbs.html', title="herbs",herbCount=herbCount, herbitems=herbItems))
+    return (render_template('herbs.html', title="herbs", herbCount=herbCount, herbitems=herbItems))
 
 
 @app.route("/AddGrocery", methods=['GET', 'POST'])
