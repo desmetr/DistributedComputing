@@ -19,9 +19,9 @@ URLS = {
 
 	'garden_url': 					'http://localhost:5005/garden',
 
-	'chat_url':						'http://localhost:5006/chat',
+	'chat_url':					'http://localhost:5006/chat',
 
 	'all_photos_url':				'http://localhost:5008/photo/all',
 
-	'advertisements_url':			'http://localhost:5009/getAdvertisements'
+	'advertisements_url':				'http://localhost:5009/getAdvertisements'
 }

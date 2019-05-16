@@ -18,12 +18,12 @@ def newsfeed():
 			# Success!
 
 			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
-			# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-			allPosts = []
+			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+			#allPosts = []
 
 			# Get all comments
-			# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-			allComments = []
+			allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+			#allComments = []
 
 			# Get all photos
 			# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text

@@ -23,9 +23,9 @@ class MainHandler(tornado.websocket.WebSocketHandler):
             print("looking at friend: " + str(friend))
             for client in self.connections:
                 print("looking at client: " + str(client))
-                if friend == client:
-                    print("sending to: " + str(client))
-                    self.connections[client].write_message(messageDict["postText"])
+                #if friend == client:
+                print("sending to: " + str(client))
+                self.connections[client].write_message(messageDict["postText"])
 
     def on_close(self):
         print("closing: " + self.request.uri)
@@ -43,5 +43,5 @@ def make_app():
 
 if __name__ == "__main__":
     app = make_app()
-    app.listen(8888)
+    app.listen(8889)
     tornado.ioloop.IOLoop.current().start()
