@@ -1,5 +1,0 @@
-{% for advertisement in advertisements %}
-                    <p>
-                        {{advertisement.text}} For more check: <a href={{advertisement.source_url}}>Potatoes</a>
-                    </p>
-            {% endfor %}

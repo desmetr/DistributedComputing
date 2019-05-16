@@ -36,6 +36,19 @@
             modal.style.display = "none";
           }
         } 
+
+
+        if ({{submitted}}){
+            console.log("submitted was true");
+            var ws = new WebSocket("ws://127.0.0.1:8888/notifications/b");
+            ws.onopen = function(){
+                ws.send("{{postInfo}}");
+                ws.close()
+                window.location.replace("http://localhost:5003/newsfeed");
+            }
+        } else {
+            console.log("submitted was false")
+        }
     </script>
 
 

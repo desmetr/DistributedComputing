@@ -14,14 +14,14 @@ import os
 import io
 from PIL import Image
 
-@advApp.route("/getAdvertisements/<userName>")
-def advertisement(userName):
+@advApp.route("/getAdvertisements/<userId>")
+def advertisement(userId):
     #print(Advertisement.query.delete())
     #advDB.session.commit()
-    
+    print("made it to advertisements")
     print(Advertisement.query.all())
 
-    contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_for_user_url']+"/"+userName).read().decode('utf-8'))
+    contents = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_posts_for_user_url']+"/"+userId).read().decode('utf-8'))
     bagOfWords = {}
     tags = Advertisement.query.with_entities(Advertisement.tag).distinct().all()
     print("tags")

@@ -9,7 +9,8 @@ from datetime import datetime
 import requests
 import itertools
 import urlsConfig
-
+import json
+import urllib.request
 postText = ""
 
 @postApp.route("/getAllPosts", methods=["GET"])
@@ -23,6 +24,10 @@ def makePost():
 	# TODO ask username of current user
 	# if current_user.is_authenticated:
 	# 	return redirect(url_for("posts"))
+	
+	#print(Post.query.delete())
+	#postDB.session.commit()
+
 	global postText
 	
 	postForm = PostForm()
@@ -34,24 +39,34 @@ def makePost():
 
 		# Only show div is post contained a bad word
 		if response.text == "BAD":
-			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='')
+			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
 		elif response.text == "GOOD":
-			post = Post(postText=postText, user="b", timestamp=datetime.now())
+			post = Post(postText=postText, user="2", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
-
 			flash("Successfully created a new post!")
-			return redirect(urlsConfig.URLS['newsfeed_url'])
+			#return redirect(urlsConfig.URLS['newsfeed_url'])
+			users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
+			print(users)
+			postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
+			print(postJson)
+			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
 
 	if postFormAfterCheck.validate_on_submit():
 		if postFormAfterCheck.submitAfterCheck.data:
-			post = Post(postText=postText, user="b", timestamp=datetime.now())
+			post = Post(postText=postText, user="2", timestamp=datetime.now())
 			postDB.session.add(post)
 			postDB.session.commit()
 
 			flash("Successfully created a new post!")
 			# When the user decides to submit anyway, show the newsfeed.
-			return redirect(urlsConfig.URLS['newsfeed_url'])
+			#return redirect(urlsConfig.URLS['newsfeed_url'])
+			users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
+			print(users)
+			postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
+			print(postJson)
+			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
+
 
 		elif postFormAfterCheck.discardAfterCheck.data:
 			print("Pressed discard")
@@ -60,7 +75,7 @@ def makePost():
 		else:
 			pass
 
-	return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none')
+	return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="false")
 
 @postApp.route('/makeComment', methods=["GET", "POST"])
 def makeComment():
@@ -74,19 +89,20 @@ def makeComment():
 
 	return "OK"
 
-@postApp.route("/getAllPostsForUser/<userName>", methods=["GET"])
-def getAllPostsForUser(userName):
+@postApp.route("/getAllPostsForUser/<userId>", methods=["GET"])
+def getAllPostsForUser(userId):
 	# posts = Post.query.all()
-	posts = Post.query.filter(Post.user==userName).order_by(desc(Post.timestamp)).all()
+	posts = Post.query.filter(Post.user==userId).order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
-@postApp.errorhandler(Exception)
-def exceptionHandler(error):
-	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "profanity" in repr(error).lower():
-		errorString += " to the Cyber Bullying service."
-	elif "comment" in repr(error).lower():
-		errorString += " to the Comment service."
-	else:
-		errorString += "."
-	return errorString
+#@postApp.errorhandler(Exception)
+#def exceptionHandler(error):
+#	print(error)
+#	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+#	if "profanity" in repr(error).lower():
+#		errorString += " to the Cyber Bullying service."
+#	elif "comment" in repr(error).lower():
+#		errorString += " to the Comment service."
+#	else:
+#		errorString += "."
+#	return errorString

@@ -137,8 +137,24 @@ def getFriendship():
 
 @loginApp.route("/getAllFriends", methods=["GET"])
 def getAllFriends():
-	friends = Friendship.query.filter((Friendship.user1 == current_user.id) | (Friendship.user2 == current_user.id)).all()
-	return jsonify([Friendship.serialize(friend) for friend in friends])
+	#friends = Friendship.query.filter((Friendship.user1 == current_user.id) | (Friendship.user2 == current_user.id)).all()
+	foundUser = User.query.filter(User.username=="b").first()
+	print("foundUser:")
+	print(foundUser)
+	foundFriends = Friendship.query.filter((Friendship.user1 == foundUser.id) | (Friendship.user2 == foundUser.id)).all()
+	print("friends:")
+	friends=[]
+	for friend in foundFriends:
+		print(foundUser.id)
+		print(friend.user1)
+		print(friend.user2)
+		
+		if(foundUser.id == friend.user1):
+			friends.append(friend.user2)
+		else:
+			friends.append(friend.user1)
+	print(jsonify(friends))
+	return jsonify(friends)
 
 if __name__ == "__main__":
 	loginApp.run(debug=True)
