@@ -1,5 +1,5 @@
 from garden.models import Garden
-from flask import render_template, jsonify, flash, redirect, url_for
+from flask import render_template, jsonify, flash, redirect, url_for, jsonify
 from garden.forms import GroceryForm
 from garden import db
 from sqlalchemy import func
@@ -34,6 +34,32 @@ def herbs(User_id):
         herbItems.append(row.herbs)
     herbCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).filter(Garden.User_id == User_id).all()
     return (render_template('herbs.html', title="herbs", herbCount=herbCount, herbitems=herbItems))
+
+
+@app.route("/garden/<User_id>/getVegetables", methods=['GET','POST'])
+def getVegetables(User_id):
+    vegetablesItems = []
+    for row in db.session.query(Garden).filter_by(User_id=User_id):
+        vegetablesItems.append(row.vegetable)
+    vegetablesCount = Garden.query.with_entities(Garden.vegetable, Garden.Img_id, func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
+    return jsonify(vegetablesItems)
+
+
+@app.route("/garden/<User_id>/getFruits", methods=['GET','POST'])
+def getFruits(User_id):
+    fruitsItems = []
+    for row in db.session.query(Garden).filter_by(User_id=User_id):
+        fruitsItems.append(row.fruits)
+    fruitsCount = Garden.query.with_entities(Garden.fruits, Garden.Img_id, func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
+    return jsonify(fruitsItems)
+
+@app.route("/garden/<User_id>/getHerbs", methods=['GET','POST'])
+def getHerbs(User_id):
+    herbsItems = []
+    for row in db.session.query(Garden).filter_by(User_id=User_id):
+        herbsItems.append(row.herbs)
+    herbsCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).filter(Garden.User_id == User_id).all()
+    return jsonify(herbsItems)
 
 
 @app.route("/AddGrocery", methods=['GET', 'POST'])

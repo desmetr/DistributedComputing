@@ -1,2 +1,2 @@
 export FLASK_APP=locationApp.py
-flask run --port=5006
+flask run --port=5007

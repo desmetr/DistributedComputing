@@ -8,6 +8,7 @@
         ws.onmessage = function(evt) {
             console.log("We received a message!");
             console.log(evt.data);
+            document.getElementById("modalText").innerHTML = evt.data;
             document.getElementById("myModal").style.display="block";
         };
             
@@ -84,7 +85,7 @@
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
+        <p id="modalText">Some text in the Modal..</p>
       </div>
 
     </div>

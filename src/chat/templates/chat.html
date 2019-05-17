@@ -48,12 +48,11 @@
         if(typeof ws != "undefined"){
             ws.close();
         }
-        alert("You clicked on: " + id);
         document.getElementById("messages").innerHTML="";
 
         var request = new XMLHttpRequest()
 
-        request.open('GET', 'http://localhost:5010/chat/'+username+'/'+id, true)
+        request.open('GET', 'http://localhost:5006/chat/'+username+'/'+id, true)
         request.onload = function() {
           // Begin accessing JSON data here
           var data = JSON.parse(this.response);

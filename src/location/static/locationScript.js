@@ -78,7 +78,7 @@ function initMap()
 	
 		'<a href="http://localhost:5006/chat">Chat With User</a><br>'+
 	
-			'<a href="http://localhost:5000/friendship?other_user=3">Become Friends</a>'+
+			'<a href="http://localhost:5000/unfriend?other_user=3">Unfriend</a>' +
 		'</div>';
 					var infoWindow3 = new google.maps.InfoWindow({
 						position: {lat: 51.1845547, lng: 4.4212374},
