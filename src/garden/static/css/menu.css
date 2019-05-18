@@ -36,3 +36,15 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+.container {
+    width: 75%;
+}
+
+.card-header {
+    background-color:#CDA6EB;
+}
+
+.nav-link{
+    color:#FFFFFF
+}

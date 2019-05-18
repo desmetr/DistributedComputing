@@ -2,21 +2,32 @@
 {% block content %}
 
 <div class="card">
-    <h5 class="card-header">Fruits</h5>
+    <h5 class="card-header">
+        <nav class="nav nav-pills flex-column flex-sm-row">
+            <a class="flex-sm-fill text-sm-center nav-link " href="{{  url_for('garden') }}">My Garden</a>
+            <a class="flex-sm-fill text-sm-center nav-link " href="{{  url_for('vegetable') }}">Vegetables</a>
+            <a class="flex-sm-fill text-sm-center nav-link bg-dark" href="{{  url_for('fruits') }}">Fruits</a>
+            <a class="flex-sm-fill text-sm-center nav-link " href="{{  url_for('herbs') }}">Herbs</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{{  url_for('AddGrocery') }}">AddGrocery</a>
+        </nav>
+    </h5>
     <div class="card-body">
 
         <div class="row">
             {% for fru in fruCount %}
-            <div class="col-sm">
-                <div class="card" style="width: 18rem;">
-                    <img src=http://localhost:8080/photo/{{fru.Img_id}} class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ fru.fruits }}</h5>
-                        <a href="#" class="btn btn-primary">View</a>
+            <div class="col-sm-auto">
+                <div class="card border-0" style="width: 18rem;">
+                    <div class="d-flex bg-secondary">
+                        <div class="p-2 flex-grow-1 text-white">
+                            {{ fru.fruits }}
+                        </div>
+                        <div class="p-2 bd-highlight"><span class="badge badge-light">{{fru[2]}}</span></div>
                     </div>
-                    <button type="button" class="btn btn-primary">
-                        Count <span class="badge badge-light">{{fru[2]}}</span>
-                    </button>
+
+                    <div class="card-body">
+                        <img src="{{  url_for('static', filename='img/item.png') }}" class="card-img-top" alt="...">
+                    </div>
+
                 </div>
             </div>
             {% endfor %}

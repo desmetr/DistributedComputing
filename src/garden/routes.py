@@ -11,31 +11,23 @@ def garden():
 
     return (render_template('garden.html', title="Garden",  gardenItems=gardenItems))
 
-@app.route("/garden/<User_id>/vegetable", methods=['GET','POST'])
-def vegetable(User_id):
-    vegetableItems = []
-    for row in db.session.query(Garden).filter_by(User_id=User_id):
-        vegetableItems.append(row.vegetable)
-    vegetableCo = Garden.query.with_entities(Garden.vegetable, Garden.Img_id, func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
-    return(render_template('vegetables.html',title="vegetables", vegCount = vegetableCo, vegItems = vegetableItems))
+#Display under Garden page, Prints all veggies in db (no user specific)
+@app.route("/garden/vegetable", methods=['GET','POST'])
+def vegetable():
+    vegetableCo = Garden.query.with_entities(Garden.vegetable, Garden.Img_id, func.count(Garden.vegetable)).group_by(Garden.vegetable).all()
+    return(render_template('vegetables.html',title="vegetables", vegCount = vegetableCo))
 
-@app.route("/garden/<User_id>/fruits", methods=['GET','POST'])
-def fruits(User_id):
-    fruitItems = []
-    for row in db.session.query(Garden).filter_by(User_id=User_id):
-        fruitItems.append(row.fruits)
-    fruitsCount = Garden.query.with_entities(Garden.fruits, Garden.Img_id, func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
-    return (render_template('fruits.html', title="fruits",fruCount=fruitsCount, fruitItems=fruitItems))
+@app.route("/garden/fruits", methods=['GET','POST'])
+def fruits():
+    fruitsCount = Garden.query.with_entities(Garden.fruits, Garden.Img_id, func.count(Garden.fruits)).group_by(Garden.fruits).all()
+    return (render_template('fruits.html', title="fruits",fruCount=fruitsCount))
 
-@app.route("/garden/<User_id>/herbs", methods=['GET','POST'])
-def herbs(User_id):
-    herbItems = []
-    for row in db.session.query(Garden).filter_by(User_id=User_id):
-        herbItems.append(row.herbs)
-    herbCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).filter(Garden.User_id == User_id).all()
-    return (render_template('herbs.html', title="herbs", herbCount=herbCount, herbitems=herbItems))
+@app.route("/garden/herbs", methods=['GET','POST'])
+def herbs():
+    herbCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).all()
+    return (render_template('herbs.html', title="herbs", herbCount=herbCount))
 
-
+#This is the garden page we will have bar for veg,herb,fruits for that user
 @app.route("/garden/<User_id>/getVegetables", methods=['GET','POST'])
 def getVegetables(User_id):
     vegetablesItems = []

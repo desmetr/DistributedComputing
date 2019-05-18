@@ -19,19 +19,16 @@
 
 </head>
 
-<body>
+<body background="{{  url_for('static', filename='img/back.jpg') }}">
 
 <div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="{{  url_for('garden') }}">Garden</a>
-      <a href="{{  url_for('AddGrocery') }}">AddGrocery</a>
-
-  <a href="#">Contact</a>
-  <a href="#">Photos</a>
-  <a href="#">Notification</a>
-  <a href="#">Advertisement </a>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="{{  url_for('garden') }}">Garden</a>
+    <a href="#">Contact</a>
+    <a href="#">Photos</a>
+    <a href="#">Advertisement </a>
     <a href="#">Comments</a>
-  <a href="#">Posts</a>
+    <a href="#">Posts</a>
 
 
 </div>
@@ -49,16 +46,15 @@
 
 
 </nav>
-<div class="dropdown-divider"></div>
-<div class="container-fluid">
+<div class="container">
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-           {% for message in messages %}
-              <div class="alert alert-{{ category }}">
-                  {{ message }}
-              </div>
-           {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
 </div>
@@ -84,6 +80,8 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
+
+
 
 </script>
 </body>
