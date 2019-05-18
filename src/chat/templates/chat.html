@@ -4,8 +4,8 @@
 <div style="height:100%">
     <div style="float: left;width:15%;height:92vh;border-right: 1px solid grey;" id="users">
         {% for user in users %}
-            <div id="{{user}}" style="margin-top:10px; border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text image';grid-template-columns:80% 20%;" onclick="userOnClick(this.id)">
-                <p style="grid-area:text; text-align: center;">{{user}}</p>
+            <div id="{{user.id}}" style="margin-top:10px; border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text image';grid-template-columns:80% 20%;" onclick="userOnClick(this.id)">
+                <p style="grid-area:text; text-align: center;">{{user.username}}</p>
                 <img src="../static/img/userDumy.png" style="grid-area:image" />
             </div>
         {% endfor %}
@@ -21,26 +21,30 @@
     </div>
 </div>
     <script>
-    var username = prompt("Please enter your name:", "User1");
+    var userID = prompt("Please enter your id:", "2");
     var ws;
+    var chatID;
 
     function sendMessage() {
         var txtMessage = document.getElementById("message");
         var message = txtMessage.value;
         var today = new Date();
-        var time = today.getHours() + ":";
-        if(today.getMinutes()<10){
-            time=time+"0"+today.getMinutes();
-        }else {
-            time = time + today.getMinutes();
-        }
+        formatted_date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() 
         var payload = {
             "message": message,
-            "user": username,
-            "time": time
+            "userID": userID,
+            "time": formatted_date,
+            "chatID":chatID
         }
         ws.send(JSON.stringify(payload));
         txtMessage.value = "";
+
+        var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+        var theUrl = "http://localhost:5006/chatHistory";
+        xmlhttp.open("POST", theUrl);
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify(payload));
+
         return false;
     }
 
@@ -52,23 +56,53 @@
 
         var request = new XMLHttpRequest()
 
-        request.open('GET', 'http://localhost:5006/chat/'+username+'/'+id, true)
+        request.open('GET', 'http://localhost:5006/chat/'+userID+'/'+id, true)
         request.onload = function() {
           // Begin accessing JSON data here
           var data = JSON.parse(this.response);
+          chatID=data.id;
+          messages = data.messages;
+          if(messages!=undefined){
+              for(var i = 0; i < messages.length; i++) {
+                var obj = messages[i];
+                console.log(obj)
+                var messageBox = document.createElement("div");
+                var text = document.createElement("p");
+                text.innerHTML=obj.message;
+                var time = document.createElement("p");
+                time.innerHTML = obj.time;
 
+                if(userID==obj.userID){
+                    messageBox.style="margin-top:10px;  width:80%;float:right;border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+                    text.style="grid-area:text; text-align: right; padding-right:10px;padding-top:5px;";
+                    time.style="color: #aaa;grid-area:time;text-align:right;padding-right:10px;";
+                } else {
+                    messageBox.style="margin-top:10px; width:80%;float:left;border: 2px solid #dedede;background-color: #f1f1f1;border-radius: 5px;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
+                    text.style="grid-area:text;text-align: left;padding-left:10px;padding-top:5px;";
+                    time.style="color: #999;grid-area:time;text-align: left;padding-left:10px;";
+                }
+
+                messageBox.appendChild(text);
+                messageBox.appendChild(time);
+
+                document.getElementById("messages").appendChild(messageBox);
+              }
+          }
+
+          console.log(messages);
           if (request.status >= 200 && request.status < 400) {
             ws = new WebSocket("ws://127.0.0.1:8888/websocket/"+data.id);
 
             ws.onmessage = function(evt) {
                 var messageDict = JSON.parse(evt.data);
+                console.log(messageDict);
                 var messageBox = document.createElement("div");
                 var text = document.createElement("p");
                 text.innerHTML=messageDict.message;
                 var time = document.createElement("p");
                 time.innerHTML = messageDict.time;
 
-                if(username==messageDict.user){
+                if(userID==messageDict.userID){
                     messageBox.style="margin-top:10px;  width:80%;float:right;border: 2px solid #dedede;background-color: #ddd;border-radius: 5px;border-color: #ccc;display:grid;grid-gap:2px; grid-template-areas:'text''time';";
                     text.style="grid-area:text; text-align: right; padding-right:10px;padding-top:5px;";
                     time.style="color: #aaa;grid-area:time;text-align:right;padding-right:10px;";
