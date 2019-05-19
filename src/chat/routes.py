@@ -10,7 +10,9 @@ from datetime import datetime
 
 @chatApp.route("/")
 @chatApp.route("/chat", methods=['GET' , 'POST'])
-def chat():      
+def chat():  
+    print("Cookie:")
+    print(request.cookies.get("currentSessionCookie"))    
     users=[]
     friends = json.loads(urllib.request.urlopen(urlsConfig.URLS['users_url']).read().decode('utf-8'))
     for friend in friends:

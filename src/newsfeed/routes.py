@@ -8,9 +8,12 @@ import urlsConfig
 import json
 import urllib.request
 
+current_user_id=""
+
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
 	current_user_id = request.cookies.get("currentSessionCookie")
+	print("received cookie: " + current_user_id)
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
@@ -45,6 +48,14 @@ def newsfeed():
 			return redirect(urlsConfig.URLS['login_url'])
 	else:
 		return redirect(urlsConfig.URLS['login_url'])
+
+@newsfeedApp.route("/goToChat",methods=["GET"])
+def goToChat():
+	response = redirect(urlsConfig.URLS['chat_url'])
+	# response = redirect(urlsConfig.URLS['location_url'])
+	print("setting cookie:" + current_user_id)
+	response.set_cookie("currentSessionCookie",current_user_id)
+	return response	
 
 #@newsfeedApp.errorhandler(Exception)
 #def exceptionHandler(error):
