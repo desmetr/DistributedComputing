@@ -3,7 +3,7 @@ from wtforms import IntegerField,StringField, SubmitField
 from wtforms.validators import DataRequired, Length
 
 class GroceryForm(FlaskForm):
-    #User_id = IntegerField('User_id', validators=[Length(min=3, max=20)])
+    User_id = IntegerField('User_id', validators=[Length(min=3, max=20)])
     vegetable = StringField('vegetable',
                             validators=[DataRequired(), Length(min=3, max = 20)])
     fruits = StringField('fruits',
