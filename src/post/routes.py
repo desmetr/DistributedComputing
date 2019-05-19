@@ -11,6 +11,7 @@ import itertools
 import urlsConfig
 import json
 import urllib.request
+import base64
 postText = ""
 
 @postApp.route("/getAllPosts", methods=["GET"])
@@ -35,13 +36,17 @@ def makePost():
 
 	if postForm.validate_on_submit():
 		postText = postForm.postText.data
+		image = base64.b64encode(postForm.image.data.read()).decode('utf-8')
+
 		response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': postText})
 
 		# Only show div is post contained a bad word
 		if response.text == "BAD":
 			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
 		elif response.text == "GOOD":
-			post = Post(postText=postText, user="2", timestamp=datetime.now())
+			print("postReading")
+			print(postForm.image.data.read())
+			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
 			postDB.session.add(post)
 			postDB.session.commit()
 			flash("Successfully created a new post!")
@@ -54,7 +59,7 @@ def makePost():
 
 	if postFormAfterCheck.validate_on_submit():
 		if postFormAfterCheck.submitAfterCheck.data:
-			post = Post(postText=postText, user="2", timestamp=datetime.now())
+			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
 			postDB.session.add(post)
 			postDB.session.commit()
 

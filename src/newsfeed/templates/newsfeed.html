@@ -95,7 +95,7 @@
             {% for post in posts %}
                 <p>
                     {{ post.user }} says: <b>{{ post.postText }}</b>
-                    
+                    <img src="data:image/png;base64,{{post.image}}" alt="Post" height="250" width="250" />
                     {% if comments %}
                         {% for comment in comments %}
                         <p>
@@ -123,35 +123,6 @@
                     <hr>
                 </p>
             {% endfor %}
-        </div>
-
-        <div class="column middle">
-            {% if photos %}
-                {% for photo in photos %}
-                    {{ photo.user }}'s photo
-                    <!-- <img src="{{ url_for('static', filename=photo.filename) }}" alt="{{ photo.filename }}"> -->
-                    <img src="{{ photo }}" alt="{{ photo.filename }}">
-                    <form action="http://localhost:5002/comment" method="POST">
-                        <input type="hidden" name="postID" value={{ photo.id }}>
-                        <input type="submit" name="addComment" value="Add Comment">
-                    </form>
-
-                    <i>No comments on this photo.</i>
-                    <!-- {% if comments %}
-                        {% for comment in comments %}
-                        <p>
-                            {% if comment.postID == photo.id %}
-                                {{ comment.user }} commented: <i>{{ comment.commentText }}</i>
-                            {% endif %}
-                        </p>
-                        {% endfor %}
-                    {% else %}
-                        <i>No comments on this photo.</i>
-                    {% endif %} -->
-                {% endfor %}
-            {% else %}
-                Place your photos here.
-            {% endif %}
         </div>
 
         <div class="column right">

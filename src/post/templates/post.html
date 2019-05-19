@@ -52,11 +52,12 @@
     </script>
 
 
-    <form action="" method="post" novalidate>
+    <form action="" method="post" novalidate enctype = "multipart/form-data">
         {{ postForm.hidden_tag() }}
         <p>
             {{ postForm.postText.label }}<br>
             {{ postForm.postText(size=144) }}<br>
+            {{postForm.image}} <br>
             {% for error in postForm.postText.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

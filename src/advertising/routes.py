@@ -70,7 +70,7 @@ def addAdvertisement():
     print("Checking form")
     if adForm.validate_on_submit():
         print("valid")
-
+        print(adForm.image.data)
         newAd = Advertisement(tag=str(adForm.tag.data).lower(),text=adForm.advertisementText.data,source_url=adForm.source.data,img=base64.b64encode(adForm.image.data.read()).decode('utf-8'))
         advDB.session.add(newAd)
         advDB.session.commit()

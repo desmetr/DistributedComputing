@@ -7,6 +7,7 @@ class Post(postDB.Model):
 	postText = postDB.Column(postDB.String(144), index=True)
 	user = postDB.Column(postDB.String(64), index=True)
 	timestamp = postDB.Column(postDB.DateTime, nullable=False)
+	image = postDB.Column(postDB.String(),nullable=True)
 
 	def __repr__(self):
 		return "<Post {}, text = \"{}\" by user {}>".format(self.id, self.postText, self.user)
@@ -16,5 +17,6 @@ class Post(postDB.Model):
 			"id": self.id,
 			"postText": self.postText,
 			"user": self.user,
-			"timestamp": self.timestamp
+			"timestamp": self.timestamp,
+			"image":self.image
 		}		

@@ -13,7 +13,7 @@ current_user_id=""
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
 	current_user_id = request.cookies.get("currentSessionCookie")
-	print("received cookie: " + current_user_id)
+	#print("received cookie: " + current_user_id)
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
@@ -37,8 +37,6 @@ def newsfeed():
 			print(current_user_id)
 			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
 			#allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
-			print("allAdvertisements")
-			print(len(allAdvertisements))
 
 			commentForm = CommentForm()
 
