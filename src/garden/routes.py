@@ -37,8 +37,8 @@ def herbs():
 
 # FOR KEERTHANA: change this to showVegetables that only shows the vegetables of a user and do the same for fruits and herbs
 #This is the garden page we will have bar for veg,herb,fruits for that user
-@app.route("/garden/showVegetables", methods=['GET','POST'])
-def showVegetables():
+@app.route("/garden/showGarden", methods=['GET','POST'])
+def showGarden():
     global current_user_id
 
     current_user_id = request.cookies.get("currentSessionCookie")
