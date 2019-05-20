@@ -12,6 +12,7 @@ current_user_id=""
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
+	global current_user_id
 	current_user_id = request.cookies.get("currentSessionCookie")
 	#print("received cookie: " + current_user_id)
 	if current_user_id:
@@ -22,19 +23,20 @@ def newsfeed():
 
 			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
 			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-			#allPosts = []
+			# allPosts = []
 
 			# Get all comments
 			allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-			#allComments = []
+			# allComments = []
 
 			# Get all photos
-			# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
-			allPhotos = []
+			allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
+			# allPhotos = []
 
 			# Get all advertisements
 			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
 			print(current_user_id)
+			# allAdvertisements = []
 			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
 			#allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
 
@@ -49,10 +51,11 @@ def newsfeed():
 
 @newsfeedApp.route("/goToChat",methods=["GET"])
 def goToChat():
+	global current_user_id
+
 	response = redirect(urlsConfig.URLS['chat_url'])
-	# response = redirect(urlsConfig.URLS['location_url'])
 	print("setting cookie:" + current_user_id)
-	response.set_cookie("currentSessionCookie",current_user_id)
+	response.set_cookie("currentSessionCookie",str(current_user_id))
 	return response	
 
 #@newsfeedApp.errorhandler(Exception)
