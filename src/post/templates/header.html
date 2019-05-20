@@ -15,7 +15,7 @@
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{  url_for('static', filename='css/menu.css') }}">
 
-    <title>Garden</title>
+    <title>Location</title>
 
 </head>
 
@@ -23,10 +23,10 @@
 
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="{{ url_for('garden')               }}">Garden</a>
+    <a href="{{ url_for('redirectToGarden')     }}">Garden</a>
     <a href="{{ url_for('redirectToNewsfeed')   }}">Newsfeed</a>
     <a href="{{ url_for('redirectToChat')       }}">Chat</a>
-    <a href="{{ url_for('redirectToPost')       }}">Make New Post</a>
+    <a href="{{ url_for('makePost')             }}">Make New Post</a>
     <a href="{{ url_for('redirectToLocation')   }}">Map</a>
 </div>
 
@@ -81,6 +81,8 @@ function closeNav() {
 
 
 </script>
+
+
 </body>
 
 

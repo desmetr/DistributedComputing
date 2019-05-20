@@ -100,6 +100,39 @@ def getAllPostsForUser(userId):
 	posts = Post.query.filter(Post.user==userId).order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
+# Needed to redirect to urls of another service
+@postApp.route("/redirectToGarden", methods=["GET"])
+def redirectToGarden():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['garden_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@postApp.route("/redirectToNewsfeed", methods=["GET"])
+def redirectToNewsfeed():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['newsfeed_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@postApp.route("/redirectToChat",methods=["GET"])
+def redirectToChat():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['chat_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@postApp.route("/redirectToLocation", methods=["GET"])
+def redirectToLocation():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['location_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
 #@postApp.errorhandler(Exception)
 #def exceptionHandler(error):
 #	print(error)

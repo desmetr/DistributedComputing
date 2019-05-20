@@ -134,8 +134,7 @@ def getFriendship():
 		if friendship:
 			print("Friendship exists already")
 			return "OK"
-	else:
-		return "NOK"
+	return "NOK"
 
 @loginApp.route("/getAllFriends", methods=["GET"])
 def getAllFriends():

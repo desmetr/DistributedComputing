@@ -8,11 +8,16 @@ import urllib.request
 import urlsConfig
 from datetime import datetime
 
+current_user_id = ""
+
 @chatApp.route("/")
 @chatApp.route("/chat", methods=['GET' , 'POST'])
 def chat():  
+    global current_user_id
+    
     print("Cookie:")
-    print(request.cookies.get("currentSessionCookie"))    
+    print(request.cookies.get("currentSessionCookie"))  
+    current_user_id = request.cookies.get("currentSessionCookie")
     users=[]
     friends = json.loads(urllib.request.urlopen(urlsConfig.URLS['users_url']).read().decode('utf-8'))
     for friend in friends:
@@ -78,3 +83,36 @@ def addMessage():
 def getAllHistory():
     messages = ChatHistory.query.all()
     return jsonify([ChatHistory.serialize(message) for message in messages])
+
+# Needed to redirect to urls of another service
+@chatApp.route("/redirectToGarden", methods=["GET"])
+def redirectToGarden():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['garden_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@chatApp.route("/redirectToNewsfeed", methods=["GET"])
+def redirectToNewsfeed():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['newsfeed_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@chatApp.route("/redirectToPost", methods=["GET"])
+def redirectToPost():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['post_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@chatApp.route("/redirectToLocation", methods=["GET"])
+def redirectToLocation():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['location_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 

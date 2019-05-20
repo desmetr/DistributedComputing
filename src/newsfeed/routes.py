@@ -49,14 +49,38 @@ def newsfeed():
 	else:
 		return redirect(urlsConfig.URLS['login_url'])
 
-@newsfeedApp.route("/goToChat",methods=["GET"])
-def goToChat():
-	global current_user_id
+# Needed to redirect to urls of another service
+@newsfeedApp.route("/redirectToGarden", methods=["GET"])
+def redirectToGarden():
+    global current_user_id
 
-	response = redirect(urlsConfig.URLS['chat_url'])
-	print("setting cookie:" + current_user_id)
-	response.set_cookie("currentSessionCookie",str(current_user_id))
-	return response	
+    response = redirect(urlsConfig.URLS['garden_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@newsfeedApp.route("/redirectToChat",methods=["GET"])
+def redirectToChat():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['chat_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@newsfeedApp.route("/redirectToPost", methods=["GET"])
+def redirectToPost():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['post_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@newsfeedApp.route("/redirectToLocation", methods=["GET"])
+def redirectToLocation():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['location_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
 
 #@newsfeedApp.errorhandler(Exception)
 #def exceptionHandler(error):

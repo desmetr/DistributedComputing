@@ -62,6 +62,34 @@ function initMap()
 	}
 					var contentString = 
 		'<div id="content">' +
+		'User: <b>b</b>' +
+		'<br>Vegetables:' +
+		'<ul>' +
+		'<li><b>p</b> (t)</li>'+
+		'</ul>'+
+		'Fruits:'+
+		'<ul>'+
+	'<li><b>s</b> (r)</li>'+
+		'</ul>'+
+		'Herbs:'+
+		'<ul>'+
+	'<li><b>c</b> (r)</li>'+'</ul>'+
+		'<a href="http://localhost:5005/garden">Go To Garden</a><br>'+
+	
+		'<a href="http://localhost:5006/chat">Chat With User</a><br>'+
+	
+			'<a href="http://localhost:5000/unfriend?other_user=2">Unfriend</a>' +
+		'</div>';
+					var infoWindow2 = new google.maps.InfoWindow({
+						position: {lat: 51.21331439999999, lng: 4.4500289},
+						content: contentString,
+						map: map,
+						
+					})
+
+					
+					var contentString = 
+		'<div id="content">' +
 		'User: <b>c</b>' +
 		'<br>Vegetables:' +
 		'<ul>' +
@@ -81,7 +109,7 @@ function initMap()
 			'<a href="http://localhost:5000/unfriend?other_user=3">Unfriend</a>' +
 		'</div>';
 					var infoWindow3 = new google.maps.InfoWindow({
-						position: {lat: 51.1845547, lng: 4.4212374},
+						position: {lat: 51.1959128, lng: 4.4197308},
 						content: contentString,
 						map: map,
 						

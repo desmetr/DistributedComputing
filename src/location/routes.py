@@ -17,7 +17,7 @@ ICON = False
 current_user = None
 
 @locationApp.route("/location", methods=["GET", "POST"])
-def showOthersOnMap():
+def location():
 	global current_user
 
 	# Structure of an address:
@@ -38,21 +38,31 @@ def showOthersOnMap():
 
 		for _, address in enumerate(addresses):
 			# Don't wanna see yourself, so excluded.
-			print(current_user['id'] != address[0])
 			if current_user['id'] != address[0]:
 				lat = address[2]
 				lng = address[3]
 
-				currentVegetables = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
-				currentFruits = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
-				currentHerbs = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
+				currentVegetables = []
+				vegetablesResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
+				if vegetablesResponse.json():
+					currentVegetables = vegetablesResponse.json()
+
+				currentFruits = []
+				fruitsResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
+				if fruitsResponse.json():
+					currentFruits = fruitsResponse.json()
+
+				currentHerbs = []
+				herbsReponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
+				if herbsReponse.json():
+					currentHerbs = herbsReponse.json()
 
 				if ICON:
 					locationScript += """
 						icon: '""" + address[4] + """',
 						"""
 
-				contentString = getContentString(address, currentVegetables.json(), currentFruits.json(), currentHerbs.json())
+				contentString = getContentString(address, currentVegetables, currentFruits, currentHerbs)
 						
 				locationScript += """
 					var contentString = """ + contentString + """;
@@ -170,6 +180,39 @@ def getContentString(address, currentVegetables, currentFruits, currentHerbs):
 	contentString += "'</div>'"
 
 	return contentString
+
+# Needed to redirect to urls of another service
+@locationApp.route("/redirectToGarden", methods=["GET"])
+def redirectToGarden():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['garden_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@locationApp.route("/redirectToNewsfeed", methods=["GET"])
+def redirectToNewsfeed():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['newsfeed_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@locationApp.route("/redirectToChat",methods=["GET"])
+def redirectToChat():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['chat_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
+
+@locationApp.route("/redirectToPost", methods=["GET"])
+def redirectToPost():
+    global current_user_id
+
+    response = redirect(urlsConfig.URLS['post_url'])
+    response.set_cookie("currentSessionCookie", str(current_user_id))
+    return response 
 
 # @locationApp.errorhandler(Exception)
 # def exceptionHandler(error):

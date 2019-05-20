@@ -15,7 +15,38 @@
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{  url_for('static', filename='css/menu.css') }}">
 
-    <title>Garden</title>
+    <title>Newsfeed</title>
+    <style type="text/css">
+            * {
+                box-sizing: border-box;
+              }
+
+              /* Create two unequal columns that float next to each other */
+              .column {
+                float: left;
+                padding: 10px;
+              }
+
+              .left {
+                width: 50%;
+              }
+
+              .middle {
+                width: 25%;
+              }
+
+              .right {
+                height: 25%;
+                background-color: #dcdcdc
+              }
+
+              /* Clear floats after the columns */
+              .row:after {
+                content: "";
+                display: table;
+                clear: both;
+              }
+          </style>
 
 </head>
 
@@ -23,8 +54,8 @@
 
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="{{ url_for('garden')               }}">Garden</a>
-    <a href="{{ url_for('redirectToNewsfeed')   }}">Newsfeed</a>
+    <a href="{{ url_for('redirectToGarden')     }}">Garden</a>
+    <a href="{{ url_for('newsfeed')             }}">Newsfeed</a>
     <a href="{{ url_for('redirectToChat')       }}">Chat</a>
     <a href="{{ url_for('redirectToPost')       }}">Make New Post</a>
     <a href="{{ url_for('redirectToLocation')   }}">Map</a>
@@ -81,6 +112,8 @@ function closeNav() {
 
 
 </script>
+
+
 </body>
 
 
