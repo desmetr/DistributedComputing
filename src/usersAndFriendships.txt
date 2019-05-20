@@ -1,0 +1,37 @@
+User 1
+------
+	username = a
+	email = a@a.com
+	location = Middelheimlaan 1, Berchem
+	password = a
+	no admin
+
+User 2
+------
+	username = b
+	email = b@b.com
+	location = Collegelaan 1, Borgerhout
+	password = b
+	no admin
+
+User 3
+------
+	username = c
+	email = c@c.com
+	location = Driekoningenstraat 20, Berchem
+	password = c
+	no admin
+
+User 4
+------
+	username = admin
+	email = admin@coltivate.com
+	location = Rooseveltplaats 100, Antwerpen
+	password = admin
+	admin
+
+
+Friendship 1
+------------
+	user1 = 0
+	user2 = 1

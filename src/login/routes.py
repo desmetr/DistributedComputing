@@ -38,13 +38,10 @@ def logout():
 	return redirect(url_for("login"))
 
 @loginApp.route("/register", methods=["GET", "POST"])
-def register():
-	if current_user.is_authenticated:
-		return redirect(url_for("index"))
-	
+def register():	
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(username=form.username.data, email=form.email.data, location=form.location.data)
+		user = User(username=form.username.data, email=form.email.data, location=form.location.data, admin=form.admin.data)
 		user.set_password(form.password.data)
 		user.calculateLatLng()
 
@@ -88,6 +85,11 @@ def getSingleUser():
 			return jsonify(response_object), 200
 	except ValueError:
 		return jsonify(response_object), 404
+
+@loginApp.route("/getAdmins", methods=["GET"])
+def getAdmins():
+	admins = User.query.filter_by(admin=True)
+	return jsonify([User.serialize(admin) for admin in admins])
 
 @loginApp.route("/friendship", methods=["GET"])
 def friendship():

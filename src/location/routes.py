@@ -106,7 +106,9 @@ def getAllAddressesFromUsers():
 	response = requests.get(urlsConfig.URLS['users_url'])
 
 	for user in response.json():
-		addresses.append([user["id"], user["username"], user["lat"], user["lng"]])
+		# We don't want to see the admins on the map.
+		if not user["admin"]:
+			addresses.append([user["id"], user["username"], user["lat"], user["lng"]])
 
 	return addresses
 
