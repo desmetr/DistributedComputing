@@ -36,7 +36,9 @@ def makePost():
 
 	if postForm.validate_on_submit():
 		postText = postForm.postText.data
-		image = base64.b64encode(postForm.image.data.read()).decode('utf-8')
+		image = ""
+		if postForm.image.data:
+			image = base64.b64encode(postForm.image.data.read()).decode('utf-8')
 
 		response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': postText})
 
@@ -45,7 +47,7 @@ def makePost():
 			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
 		elif response.text == "GOOD":
 			print("postReading")
-			print(postForm.image.data.read())
+			# print(postForm.image.data.read())
 			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
 			postDB.session.add(post)
 			postDB.session.commit()

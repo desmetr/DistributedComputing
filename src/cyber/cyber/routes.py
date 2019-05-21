@@ -1,6 +1,6 @@
 from cyber import app
 from flask import render_template, request
-
+import string
 
 @app.route("/profanity", methods=['GET', 'POST'])
 def about():
@@ -11,7 +11,8 @@ def about():
     m = open('cyber/dutch_bad_word.txt', "r")
     dutch_bad_word = m.read().splitlines()
 
-    brokenStr1 = text.split()
+    brokenStr1 = text.translate(str.maketrans('', '', string.punctuation)).split()
+    print(brokenStr1)
     
     badWordMask = '!@#$%!@#$%^~!@%^~@#$%!@#$%^~!'
     new = ''
@@ -28,11 +29,10 @@ def about():
             text = "delete the post coz it contains dutch bad words"
             # print("delete the post coz it contains dutch bad words")
             return "BAD"
-        else:
-            # print("okay fine")
-            text = "Ok, Fine"
-            return "GOOD"
-        # print new
+    
+    print("okay fine")
+    text = "Ok, Fine"
+    return "GOOD"
 
     with app.app_context():
         return render_template('about.html', title="about", text=text)
