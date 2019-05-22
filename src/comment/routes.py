@@ -55,12 +55,12 @@ def comment():
 
 	return render_template("comment.html", title="Comment", commentForm=commentForm, commentFormAfterCheck=commentFormAfterCheck, display='none')
 
-@commentApp.route("/delete/<id>", methods=['GET', 'POST'])
+@commentApp.route("/deleteComment", methods=['GET', 'POST', 'DELETE'])
 def deleteComment():
-    if 'commentID' in request.form:
-        commentID = request.form['commentID']
-        response= requests.get(urlsConfig.URLS['delete_comment'] + str(commentID))
-    return "Ok deletecomment"
+    comment_id = int(request.args.get('comment_id'))
+    comment = Comment.query.filter_by(id=comment_id).delete()
+    commentDB.session.commit()
+    return "OK"
 
 @commentApp.route("/getCommentsOnePost", methods=["GET"])
 def getCommentsOfPost():

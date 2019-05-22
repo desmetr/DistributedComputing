@@ -102,6 +102,13 @@ def getAllPostsForUser(userId):
 	posts = Post.query.filter(Post.user==userId).order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
+@postApp.route("/deletePost", methods=['GET', 'POST'])
+def deleteUser(id):
+    post_id = int(request.args.get('post_id'))
+    post = Post.query.filter_by(id=post_id).delete()
+    postDB.session.commit()
+    return "OK"
+
 # Needed to redirect to urls of another service
 @postApp.route("/redirectToGarden", methods=["GET"])
 def redirectToGarden():

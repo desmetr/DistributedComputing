@@ -19,8 +19,8 @@ def newsfeed():
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
-		print(current_user_response.json())
-		isAdmin = current_user_response['admin']
+		print(current_user_response.json()['data']['admin'])
+		isAdmin = current_user_response.json()['data']['admin']
 		if current_user_response.status_code == 200:
 			# Success!
 

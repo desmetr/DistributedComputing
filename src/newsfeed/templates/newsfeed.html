@@ -76,6 +76,14 @@
             }
       </style>
 
+      <script type="text/javascript">
+        // If not an admin, hide the link.
+        if ({{ isAdmin != true }})
+          adminLink = document.getElementById("adminLink")
+          adminLink.style.display = 'hidden';
+          //link.style.visibility = 'none';
+      </script>
+
     <h1>Your newsfeed</h1>
 
 
@@ -89,13 +97,6 @@
       </div>
 
     </div>
-
-  <div id="mySidenav" class="sidenav">
-      {% if isAdmin %}
-        <a href="{{ url_for('redirectToLocation')   }}">Map</a>
-      {% endif %}
-
-</div>
 
     <div class="row">
         <div class="column left">

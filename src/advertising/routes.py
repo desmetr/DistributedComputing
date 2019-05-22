@@ -1,7 +1,7 @@
 from advertising.models import Advertisement
 from advertising import advApp
 from advertising import advDB
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from sqlalchemy import func
 import json
 from flask import send_file
@@ -63,6 +63,10 @@ def advertisement(userId):
     else:
         return "{}"
 
+@advApp.route("/getAllAdvertisements", methods=["GET", "POST"])
+def getAllAdvertisement():
+    advertisementsJson = [Advertisement.serialize(adv) for adv in Advertisement.query.all()]
+    return json.dumps(advertisementsJson)
 
 @advApp.route("/advertisement",  methods=["GET", "POST"])
 def addAdvertisement():
@@ -87,9 +91,9 @@ def addAdvertisement():
     #return "Advertisement added!"
 
 
-@advApp.route("/delete/<id>", methods=['GET', 'POST'])
+@advApp.route("/deleteAdvertisement", methods=['GET', 'POST', 'DELETE'])
 def deleteAdverstiment():
-    if 'advertisingID' in request.form:
-        advertisingID = request.form['advertisingID']
-        response= requests.get(urlsConfig.URLS['advertising_post'] +  str(advertisingID))
-    return "delete Ad"
+    adv_id = int(request.args.get('adv_id'))
+    advertisement = Advertisement.query.filter_by(id=adv_id).delete()
+    advDB.session.commit()
+    return "OK"

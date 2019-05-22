@@ -80,16 +80,17 @@ def getSingleUser():
 					'username': user.username,
 					'email': user.email,
 					'location': user.location,
+					'admin': user.admin,
 				}
 			}
 			return jsonify(response_object), 200
 	except ValueError:
 		return jsonify(response_object), 404
 
-@loginApp.route("/delete/<id>", methods=['GET', 'POST'])
-def deleteUser(id):
-    user = User.query.get(id)
-    loginDB.session.delete(user)
+@loginApp.route("/deleteUser", methods=['GET', 'POST', 'DELETE'])
+def deleteUser():
+    user_id = int(request.args.get('user_id'))
+    user = User.query.filter_by(id=user_id).delete()
     loginDB.session.commit()
     return "OK"
 

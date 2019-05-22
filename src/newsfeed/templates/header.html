@@ -59,8 +59,8 @@
     <a href="{{ url_for('redirectToChat')       }}">Chat</a>
     <a href="{{ url_for('redirectToPost')       }}">Make New Post</a>
     <a href="{{ url_for('redirectToLocation')   }}">Map</a>
+    <a id="adminLink" href="http://localhost:5010/admin">Admin Page</a>
 </div>
-
 
 <nav class="navbar navbar-light bg-light">
     <a class="navbar-brand" href="#">
@@ -109,7 +109,13 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 
-
+// If not an admin, hide the link.
+if ({{ isAdmin != true }})
+{
+  document.getElementById("adminLink").style.visibility = "hidden";
+}
+  //adminLink.style.display = 'none';
+  //adminLink.style.visibility = 'hidden';
 
 </script>
 
