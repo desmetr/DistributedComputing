@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930 64-bit) (preloaded format=pdflatex 2019.3.5)  21 MAY 2019 19:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930 64-bit) (preloaded format=pdflatex 2019.3.5)  22 MAY 2019 10:15
 entering extended mode
 **./final_architecture.tex
 (final_architecture.tex
@@ -205,10 +205,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 62--64
 File: Microservices_architecture_final.pdf Graphic file (type pdf)
 <use Microservices_architecture_final.pdf>
 Package pdftex.def Info: Microservices_architecture_final.pdf  used on input li
-ne 80.
+ne 76.
 (pdftex.def)             Requested size: 555.99582pt x 438.6778pt.
 
-Overfull \hbox (80.63756pt too wide) in paragraph at lines 80--81
+Overfull \hbox (80.63756pt too wide) in paragraph at lines 76--77
 [][] 
  []
 
@@ -230,7 +230,7 @@ Here is how much of TeX's memory you used:
 sfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
 m/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.p
 fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on final_architecture.pdf (5 pages, 83177 bytes).
+Output written on final_architecture.pdf (5 pages, 82701 bytes).
 PDF statistics:
  44 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

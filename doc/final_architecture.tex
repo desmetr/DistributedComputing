@@ -8,7 +8,7 @@
 
 \begin{document}
 
-\title{Distributed Computing - Final Architecture - Group 4}
+\title{Distributed Computing - Final Architecture Coltivate - Group 4}
 \author{ Rafael De Smet \\
   \texttt{rafael.desmet@student.uantwerpen.be}  \and
   Keerthana Sanala Prakash \\
@@ -24,7 +24,7 @@ In this document we explain the architecture of our website. We give a schematic
 
 \section{Microservices}
 
-All the communication between the microservices is done via the REST protocol. Two users that chat communicate via websockets. In the front-end of all the services, we give the user the option to at any time go to either the chat, his garden page, the map with other users or to make a new post.
+All the communication between the microservices is done via the REST protocol. Two users that chat communicate via websockets. In the front-end of all the services, we give the user the options to at any time go to either the chat, his garden page, the map with other users or to make a new post.
 
 \subsection{Admin Service}
 
@@ -62,15 +62,11 @@ This service was not in the original scope of the assignment, but was requested 
 This service stores all information about the users registered on the website. If a user surfs to the website he is asked to login, then is automatically redirected to his newsfeed. Should a new user arrive who is not yet registered, he can fill in his information and register. Besides his name and email, we also ask him the address of his garden. This address is used to be able to show him in the map of the location service. In the User database we store all the users registered on the website. An admin user is also stored here, denoted by a Boolean column in the database. Besides the user information, we also store the Friendship information here. Two users can be friends with each other, if so this information is stored here.
 \newline
 
-This service is linked to a few other services, such as the newsfeed, the garden, the location and the chat. These services can only be accessed when a user is logged in and they also need to know the information about the current user. We sent the user id via the session cookie with which they then can ask other information from the service if needed. 
+This service is linked to a few other services, such as the newsfeed, the garden, the location and the chat. These services can only be accessed when a user is logged in and they also need to know the information about the current user. We send the user id via the session cookie with which they then can ask other information about the user if needed. 
 
 \subsection{Newsfeed Service}
 
 The newsfeed collects all the latest posts and comments that belong to those posts, the latest photos and the current advertisements suited for the user. All this is shown in a list. This service is linked to the post, comment, photo, advertisement, notifications and chat services.
-
-\subsection{Photo Service}
-
-This service stores all the photos user upload to the website. For example a user wants to show how much progress he has made on growing his potatoes. This service is linked to the post service because we offer the user the choice in the post service whether he wants to submit a text post or a photo.
 
 \subsection{Post Service}
 
