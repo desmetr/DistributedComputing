@@ -5,7 +5,7 @@ from chat.models import Chat, ChatHistory
 from sqlalchemy import or_
 import json
 import urllib.request
-import urlsConfig
+from chat import urlsConfig
 from datetime import datetime
 
 current_user_id = ""

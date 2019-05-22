@@ -4,7 +4,7 @@ from location import locationApp
 from location.forms import LocationForm
 import requests
 import imghdr
-import urlsConfig
+from location import urlsConfig
 
 search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
 details_url = "https://maps.googleapis.com/maps/api/place/details/json"

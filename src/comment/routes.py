@@ -7,7 +7,7 @@ from werkzeug.urls import url_parse
 from sqlalchemy import desc
 from datetime import datetime
 import requests
-import urlsConfig
+from comment import urlsConfig
 
 commentText = ""
 postID = None

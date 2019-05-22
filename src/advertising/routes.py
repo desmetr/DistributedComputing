@@ -6,13 +6,9 @@ from sqlalchemy import func
 import json
 from flask import send_file
 import urllib.request
-import urlsConfig
+from advertising import urlsConfig
 import base64
 from advertising.forms import AdvertisementForm
-
-import os
-import io
-from PIL import Image
 
 @advApp.route("/getAdvertisements/<userId>")
 def advertisement(userId):

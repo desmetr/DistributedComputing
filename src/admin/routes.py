@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from admin.forms import DeleteForm
-import urlsConfig
+from admin import urlsConfig
 import requests
 import json
 import urllib.request

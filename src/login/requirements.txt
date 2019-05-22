@@ -1,6 +1,7 @@
-flask-wtf
-flask-migrate
-Flask-SQLAlchemy==2.3.2
-Flask-Testing==0.7.1
-flask-login
+Flask
+flask_sqlalchemy
+flask_wtf
+wtforms
+flask_login
 requests
+flask_migrate

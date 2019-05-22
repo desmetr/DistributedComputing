@@ -1,7 +1,7 @@
 Flask
 flask_sqlalchemy
-flask_wtf
-wtforms
-flask_login
-requests
 flask_migrate
+wtforms
+flask_wtf
+requests
+flask_login

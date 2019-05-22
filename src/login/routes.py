@@ -7,7 +7,7 @@ from login.forms import LoginForm, RegistrationForm
 # from models import User
 from login.models import User, Friendship
 from werkzeug.urls import url_parse
-import urlsConfig
+from login import urlsConfig
 
 @loginApp.route("/login", methods=["GET", "POST"])
 def login():

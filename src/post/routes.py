@@ -8,7 +8,7 @@ from sqlalchemy import desc
 from datetime import datetime
 import requests
 import itertools
-import urlsConfig
+from post import urlsConfig
 import json
 import urllib.request
 import base64

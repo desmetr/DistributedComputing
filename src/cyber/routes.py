@@ -6,9 +6,9 @@ import string
 def about():
     text = request.args.get('text')
 
-    f = open('cyber/Eng_bad_word.txt', "r")
+    f = open('Eng_bad_word.txt', "r")
     eng_bad_words = f.read().splitlines()
-    m = open('cyber/dutch_bad_word.txt', "r")
+    m = open('dutch_bad_word.txt', "r")
     dutch_bad_word = m.read().splitlines()
 
     brokenStr1 = text.translate(str.maketrans('', '', string.punctuation)).split()

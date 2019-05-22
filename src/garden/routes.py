@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import requests
 import urllib.request
-import urlsConfig
+from garden import urlsConfig
 from flask import render_template, jsonify, flash, redirect, url_for, jsonify, request
 from garden.forms import GroceryForm
 from garden import db

@@ -4,7 +4,7 @@ from newsfeed import newsfeedApp
 from werkzeug.urls import url_parse
 from comment.forms import CommentForm
 import requests
-import urlsConfig
+from newsfeed import urlsConfig
 import json
 import urllib.request
 
