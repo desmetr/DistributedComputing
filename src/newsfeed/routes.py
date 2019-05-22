@@ -12,38 +12,41 @@ current_user_id=""
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
+	print("kdjsjf")
 	global current_user_id
 	current_user_id = request.cookies.get("currentSessionCookie")
-	#print("received cookie: " + current_user_id)
+	print("received cookie: " + current_user_id)
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
+		print(current_user_response.json())
+		isAdmin = current_user_response['admin']
 		if current_user_response.status_code == 200:
 			# Success!
 
 			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
-			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-			# allPosts = []
+			# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+			allPosts = []
 
 			# Get all comments
-			allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-			# allComments = []
+			# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+			allComments = []
 
 			# Get all photos
-			allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
-			# allPhotos = []
+			# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
+			allPhotos = []
 
 			# Get all advertisements
 			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
 			print(current_user_id)
-			# allAdvertisements = []
-			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
+			allAdvertisements = []
+			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
 			#allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
 
 			commentForm = CommentForm()
 
 			# Show list
-			return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=allAdvertisements,userID=current_user_id)
+			return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=allAdvertisements,userID=current_user_id, isAdmin=isAdmin)
 		else:
 			return redirect(urlsConfig.URLS['login_url'])
 	else:
@@ -57,6 +60,13 @@ def redirectToGarden():
     response = redirect(urlsConfig.URLS['garden_url'])
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
+
+@newsfeedApp.route("/delete/<id>", methods=['GET', 'POST'])
+def deletePost():
+    if 'postID' in request.form:
+        postID = request.form['postID']
+        response= requests.get(urlsConfig.URLS['delete_post'] +  str(postID))
+    return "Delete post"
 
 @newsfeedApp.route("/redirectToChat",methods=["GET"])
 def redirectToChat():

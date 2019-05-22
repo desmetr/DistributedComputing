@@ -86,6 +86,13 @@ def getSingleUser():
 	except ValueError:
 		return jsonify(response_object), 404
 
+@loginApp.route("/delete/<id>", methods=['GET', 'POST'])
+def deleteUser(id):
+    user = User.query.get(id)
+    loginDB.session.delete(user)
+    loginDB.session.commit()
+    return "OK"
+
 @loginApp.route("/getAdmins", methods=["GET"])
 def getAdmins():
 	admins = User.query.filter_by(admin=True)

@@ -85,3 +85,11 @@ def addAdvertisement():
     #advDB.session.add(advertisement)
     #advDB.session.commit()
     #return "Advertisement added!"
+
+
+@advApp.route("/delete/<id>", methods=['GET', 'POST'])
+def deleteAdverstiment():
+    if 'advertisingID' in request.form:
+        advertisingID = request.form['advertisingID']
+        response= requests.get(urlsConfig.URLS['advertising_post'] +  str(advertisingID))
+    return "delete Ad"

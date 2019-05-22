@@ -90,6 +90,13 @@
 
     </div>
 
+  <div id="mySidenav" class="sidenav">
+      {% if isAdmin %}
+        <a href="{{ url_for('redirectToLocation')   }}">Map</a>
+      {% endif %}
+
+</div>
+
     <div class="row">
         <div class="column left">
             {% for post in posts %}
