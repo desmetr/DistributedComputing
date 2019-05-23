@@ -27,8 +27,6 @@ URLS = {
 
 	'location_url':					'http://192.168.99.103:30507/location',
 
-	'all_photos_url':				'http://192.168.99.103:30508/photo/all',
-
 	'advertisements_url':			'http://192.168.99.103:30509/getAdvertisements',
 	'all_advertisements_url':		'http://192.168.99.103:30509/getAllAdvertisements',
 	'delete_advertisement_url':		'http://192.168.99.103:30509/deleteAdvertisement?adv_id='

@@ -116,7 +116,7 @@
                         <i>No comments on this post.</i>
                     {% endif %} 
 
-                    <form action="http://localhost:5002/comment" method="POST">
+                    <form action="http://192.168.99.103:30502/comment" method="POST">
                         <input type="hidden" name="postID" value={{ post.id }}>
                         {{ commentForm.hidden_tag() }}
                         <p>

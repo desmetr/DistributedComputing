@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from newsfeed import newsfeedApp
 from werkzeug.urls import url_parse
-from comment.forms import CommentForm
+from newsfeed.forms import CommentForm
 import requests
 from newsfeed import urlsConfig
 import json
@@ -12,29 +12,24 @@ current_user_id=""
 
 @newsfeedApp.route("/newsfeed", methods=["GET"])
 def newsfeed():
-	print("kdjsjf")
 	global current_user_id
 	current_user_id = request.cookies.get("currentSessionCookie")
 	print("received cookie: " + current_user_id)
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
-		print(current_user_response.json()['data']['admin'])
-		isAdmin = current_user_response.json()['data']['admin']
+
 		if current_user_response.status_code == 200:
 			# Success!
+			isAdmin = current_user_response.json()['data']['admin']
 
 			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
-			# allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-			allPosts = []
+			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+			# allPosts = []
 
 			# Get all comments
-			# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-			allComments = []
-
-			# Get all photos
-			# allPhotos = requests.get(urlsConfig.URLS['all_photos_url']).text
-			allPhotos = []
+			allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+			# allComments = []
 
 			# Get all advertisements
 			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
@@ -46,7 +41,7 @@ def newsfeed():
 			commentForm = CommentForm()
 
 			# Show list
-			return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, photos=allPhotos, advertisements=allAdvertisements,userID=current_user_id, isAdmin=isAdmin)
+			return render_template("newsfeed.html", commentForm=commentForm, posts=allPosts, comments=allComments, advertisements=allAdvertisements, userID=current_user_id, isAdmin=isAdmin)
 		else:
 			return redirect(urlsConfig.URLS['login_url'])
 	else:
