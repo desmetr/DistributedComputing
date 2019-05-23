@@ -3,14 +3,7 @@ from location.key import key
 from location import locationApp
 from location.forms import LocationForm
 import requests
-import imghdr
 from location import urlsConfig
-
-search_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-details_url = "https://maps.googleapis.com/maps/api/place/details/json"
-photos_url = "https://maps.googleapis.com/maps/api/place/photo"
-template_embed_url = "https://www.google.com/maps/embed/v1/place?key=" + key + "&q="
-# geo_location_url = "https://maps.googleapis.com/maps/api/js?key=" + key + "&callback=initMap"         
 
 IN_RADIUS = False
 ICON = False
@@ -214,13 +207,13 @@ def redirectToPost():
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
 
-# @locationApp.errorhandler(Exception)
-# def exceptionHandler(error):
-# 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-# 	if "garden" in repr(error).lower():
-# 		errorString += " to the Garden service."
-# 	elif "user" in repr(error).lower():
-# 		errorString += " to the Login service."
-# 	else:
-# 		errorString += "."
-# 	return errorString
+@locationApp.errorhandler(Exception)
+def exceptionHandler(error):
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "garden" in repr(error).lower():
+		errorString += " to the Garden service."
+	elif "user" in repr(error).lower():
+		errorString += " to the Login service."
+	else:
+		errorString += "."
+	return errorString

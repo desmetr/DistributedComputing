@@ -63,65 +63,28 @@ def showGarden():
 
 @app.route("/garden/<User_id>/getVegetables", methods=['GET','POST'])
 def getVegetables(User_id):
-    # global current_user_id
-    print("A")
-    # current_user_id = request.cookies.get("currentSessionCookie")
-    # if current_user_id:
-    #     print("B")
-    #     # Get current user information
-    #     current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
-    #     if current_user_response.status_code == 200:
-    #         print("C")
     vegetablesItems = []
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         vegetablesItems.append(row.vegetable)
     vegetablesCount = Garden.query.with_entities(Garden.vegetable, Garden.Img_id, func.count(Garden.vegetable)).group_by(Garden.vegetable).filter(Garden.User_id == User_id).all()
     print(vegetablesItems)
     return jsonify(vegetablesItems)
-    #     else:
-    #         print("D")
-    #         return redirect(urlsConfig.URLS['login_url'])
-    # else:
-    #     print("E")
-    #     return redirect(urlsConfig.URLS['login_url'])
 
 @app.route("/garden/<User_id>/getFruits", methods=['GET','POST'])
 def getFruits(User_id):
-    # global current_user_id
-
-    # current_user_id = request.cookies.get("currentSessionCookie")
-    # if current_user_id:
-    #     # Get current user information
-    #     current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
-    #     if current_user_response.status_code == 200:
     fruitsItems = []
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         fruitsItems.append(row.fruits)
     fruitsCount = Garden.query.with_entities(Garden.fruits, Garden.Img_id, func.count(Garden.fruits)).group_by(Garden.fruits).filter(Garden.User_id == User_id).all()
     return jsonify(fruitsItems)
-    #     else:
-    #         return redirect(urlsConfig.URLS['login_url'])
-    # else:
-    #     return redirect(urlsConfig.URLS['login_url'])
 
 @app.route("/garden/<User_id>/getHerbs", methods=['GET','POST'])
 def getHerbs(User_id):
-    # global current_user_id
-
-    # current_user_id = request.cookies.get("currentSessionCookie")
-    # if current_user_id:
-    #     # Get current user information
-    #     current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
-    #     if current_user_response.status_code == 200:
     herbsItems = []
     for row in db.session.query(Garden).filter_by(User_id=User_id):
         herbsItems.append(row.herbs)
     herbsCount = Garden.query.with_entities(Garden.herbs, Garden.Img_id, func.count(Garden.herbs)).group_by(Garden.herbs).filter(Garden.User_id == User_id).all()
     return jsonify(herbsItems)
-    #     else:
-    #         return redirect(urlsConfig.URLS['login_url'])
-    # else:
-    #     return redirect(urlsConfig.URLS['login_url'])
 
 @app.route("/AddGrocery", methods=['GET', 'POST'])
 def AddGrocery():
@@ -182,3 +145,24 @@ def redirectToLocation():
     response = redirect(urlsConfig.URLS['location_url'])
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
+
+
+@app.errorhandler(Exception)
+def exceptionHandler(error):
+    print(error)
+    errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+    if "post" in repr(error).lower():
+        errorString += " to the Post service."
+    elif "comment" in repr(error).lower():
+        errorString += " to the Comment service."
+    elif "photo" in repr(error).lower():
+        errorString += " to the Photo service."
+    elif "advertisements" in repr(error).lower():
+        errorString += " to the Advertisement service."
+    elif "user" in repr(error).lower():
+        errorString += " to the Login service."
+    elif "location" in repr(error).lower():
+        errorString += " to the Location service."
+    else:
+        errorString += "."
+    return errorString

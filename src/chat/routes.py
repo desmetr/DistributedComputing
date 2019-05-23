@@ -116,3 +116,24 @@ def redirectToLocation():
     response = redirect(urlsConfig.URLS['location_url'])
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
+
+
+@chatApp.errorhandler(Exception)
+def exceptionHandler(error):
+    print(error)
+    errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+    if "post" in repr(error).lower():
+        errorString += " to the Post service."
+    elif "comment" in repr(error).lower():
+        errorString += " to the Comment service."
+    elif "photo" in repr(error).lower():
+        errorString += " to the Photo service."
+    elif "advertisements" in repr(error).lower():
+        errorString += " to the Advertisement service."
+    elif "user" in repr(error).lower():
+        errorString += " to the Login service."
+    elif "location" in repr(error).lower():
+        errorString += " to the Location service."
+    else:
+        errorString += "."
+    return errorString

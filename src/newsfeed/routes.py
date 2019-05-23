@@ -14,7 +14,6 @@ current_user_id=""
 def newsfeed():
 	global current_user_id
 	current_user_id = request.cookies.get("currentSessionCookie")
-	print("received cookie: " + current_user_id)
 	if current_user_id:
 		# Get current user information
 		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
@@ -33,10 +32,9 @@ def newsfeed():
 
 			# Get all advertisements
 			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
-			print(current_user_id)
 			allAdvertisements = []
 			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
-			#allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
+			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
 
 			commentForm = CommentForm()
 
@@ -87,20 +85,20 @@ def redirectToLocation():
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
 
-#@newsfeedApp.errorhandler(Exception)
-#def exceptionHandler(error):
-#	print(error)
-#	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-#	if "post" in repr(error).lower():
-#		errorString += " to the Post service."
-#	elif "comment" in repr(error).lower():
-#		errorString += " to the Comment service."
-#	elif "photo" in repr(error).lower():
-#		errorString += " to the Photo service."
-#	elif "advertisements" in repr(error).lower():
-#		errorString += " to the Advertisement service."
-#	elif "user" in repr(error).lower():
-#		errorString += " to the Login service."
-#	else:
-#		errorString += "."
-#	return errorString
+@newsfeedApp.errorhandler(Exception)
+def exceptionHandler(error):
+	print(error)
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "post" in repr(error).lower():
+		errorString += " to the Post service."
+	elif "comment" in repr(error).lower():
+		errorString += " to the Comment service."
+	elif "photo" in repr(error).lower():
+		errorString += " to the Photo service."
+	elif "advertisements" in repr(error).lower():
+		errorString += " to the Advertisement service."
+	elif "user" in repr(error).lower():
+		errorString += " to the Login service."
+	else:
+		errorString += "."
+	return errorString

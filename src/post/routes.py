@@ -16,19 +16,11 @@ postText = ""
 
 @postApp.route("/getAllPosts", methods=["GET"])
 def getAllPosts():
-	# posts = Post.query.all()
 	posts = Post.query.order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
 @postApp.route("/post", methods=["GET", "POST"])
 def makePost():
-	# TODO ask username of current user
-	# if current_user.is_authenticated:
-	# 	return redirect(url_for("posts"))
-	
-	#print(Post.query.delete())
-	#postDB.session.commit()
-
 	global postText
 	
 	postForm = PostForm()
@@ -47,7 +39,6 @@ def makePost():
 			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
 		elif response.text == "GOOD":
 			print("postReading")
-			# print(postForm.image.data.read())
 			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
 			postDB.session.add(post)
 			postDB.session.commit()
@@ -98,7 +89,6 @@ def makeComment():
 
 @postApp.route("/getAllPostsForUser/<userId>", methods=["GET"])
 def getAllPostsForUser(userId):
-	# posts = Post.query.all()
 	posts = Post.query.filter(Post.user==userId).order_by(desc(Post.timestamp)).all()
 	return jsonify([Post.serialize(post) for post in posts])
 
@@ -142,14 +132,14 @@ def redirectToLocation():
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
 
-#@postApp.errorhandler(Exception)
-#def exceptionHandler(error):
-#	print(error)
-#	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-#	if "profanity" in repr(error).lower():
-#		errorString += " to the Cyber Bullying service."
-#	elif "comment" in repr(error).lower():
-#		errorString += " to the Comment service."
-#	else:
-#		errorString += "."
-#	return errorString
+@postApp.errorhandler(Exception)
+def exceptionHandler(error):
+	print(error)
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "profanity" in repr(error).lower():
+		errorString += " to the Cyber Bullying service."
+	elif "comment" in repr(error).lower():
+		errorString += " to the Comment service."
+	else:
+		errorString += "."
+	return errorString

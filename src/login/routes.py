@@ -1,19 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
-# from __init__ import loginApp, loginDB
 from login import loginApp, loginDB
-# from forms import LoginForm, RegistrationForm
 from login.forms import LoginForm, RegistrationForm
-# from models import User
 from login.models import User, Friendship
 from werkzeug.urls import url_parse
 from login import urlsConfig
 
 @loginApp.route("/login", methods=["GET", "POST"])
 def login():
-	# if current_user.is_authenticated:
-	# 	return redirect(response)
-
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
@@ -24,9 +18,7 @@ def login():
 
 		login_user(user, remember=form.remember_me.data)
 		
-		# TODO: redirect where?
 		response = redirect(urlsConfig.URLS['newsfeed_url'])
-		# response = redirect(urlsConfig.URLS['location_url'])
 		response.set_cookie("currentSessionCookie", str(user.id))
 		return response	
 
@@ -107,7 +99,6 @@ def friendship():
 		'message': 'User does not exist'
 	}
 
-	# if current_user.is_authenticated:
 	if current_user.id != other_user_id:
 		friendship = Friendship(user1=current_user.id, user2=other_user_id)
 
@@ -146,9 +137,6 @@ def getFriendship():
 
 @loginApp.route("/getAllFriends", methods=["GET"])
 def getAllFriends():
-	#friends = Friendship.query.filter((Friendship.user1 == current_user.id) | (Friendship.user2 == current_user.id)).all()
-	#print("current_user.id")	
-	#print(current_user.id)	
 	foundUser = User.query.filter(User.username=="b").first()
 	print("foundUser:")
 	print(foundUser)
@@ -166,6 +154,25 @@ def getAllFriends():
 			friends.append(friend.user1)
 	print(jsonify(friends))
 	return jsonify(friends)
+
+@loginApp.errorhandler(Exception)
+def exceptionHandler(error):
+	print(error)
+	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+	if "post" in repr(error).lower():
+		errorString += " to the Post service."
+	elif "comment" in repr(error).lower():
+		errorString += " to the Comment service."
+	elif "photo" in repr(error).lower():
+		errorString += " to the Photo service."
+	elif "advertisements" in repr(error).lower():
+		errorString += " to the Advertisement service."
+	elif "user" in repr(error).lower():
+		errorString += " to the Login service."
+	else:
+		errorString += "."
+	return errorString
+
 
 if __name__ == "__main__":
 	loginApp.run(debug=True)
