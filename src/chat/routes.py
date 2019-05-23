@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect
 from chat import chatApp
 from chat import chatDB
 from chat.models import Chat, ChatHistory
@@ -7,6 +7,7 @@ import json
 import urllib.request
 from chat import urlsConfig
 from datetime import datetime
+import requests
 
 current_user_id = ""
 
@@ -25,7 +26,7 @@ def chat():
             friends = json.loads(urllib.request.urlopen(urlsConfig.URLS['users_url']).read().decode('utf-8'))
             for friend in friends:
                 print(friend["id"]) 
-            return render_template('chat.html', title="Chat",  users=friends)
+            return render_template('chat.html', title="Chat",  users=friends,userID=current_user_id)
 
         else:
             return redirect(urlsConfig.URLS['login_url'])
@@ -126,22 +127,22 @@ def redirectToLocation():
     return response 
 
 
-@chatApp.errorhandler(Exception)
-def exceptionHandler(error):
-    print(error)
-    errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-    if "post" in repr(error).lower():
-        errorString += " to the Post service."
-    elif "comment" in repr(error).lower():
-        errorString += " to the Comment service."
-    elif "photo" in repr(error).lower():
-        errorString += " to the Photo service."
-    elif "advertisements" in repr(error).lower():
-        errorString += " to the Advertisement service."
-    elif "user" in repr(error).lower():
-        errorString += " to the Login service."
-    elif "location" in repr(error).lower():
-        errorString += " to the Location service."
-    else:
-        errorString += "."
-    return errorString
+# @chatApp.errorhandler(Exception)
+# def exceptionHandler(error):
+#     print(error)
+#     errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+#     if "post" in repr(error).lower():
+#         errorString += " to the Post service."
+#     elif "comment" in repr(error).lower():
+#         errorString += " to the Comment service."
+#     elif "photo" in repr(error).lower():
+#         errorString += " to the Photo service."
+#     elif "advertisements" in repr(error).lower():
+#         errorString += " to the Advertisement service."
+#     elif "user" in repr(error).lower():
+#         errorString += " to the Login service."
+#     elif "location" in repr(error).lower():
+#         errorString += " to the Location service."
+#     else:
+#         errorString += "."
+#     return errorString

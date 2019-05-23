@@ -21,7 +21,8 @@
     </div>
 </div>
     <script>
-    var userID = prompt("Please enter your id:", "2");
+    var userID = {{userID}};
+    console.log("userID: " + userID);
     var ws;
     var chatID;
 
@@ -40,7 +41,7 @@
         txtMessage.value = "";
 
         var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-        var theUrl = "http://localhost:5006/chatHistory";
+        var theUrl = "http://192.168.99.105:30506/chatHistory";
         xmlhttp.open("POST", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlhttp.send(JSON.stringify(payload));
@@ -52,11 +53,12 @@
         if(typeof ws != "undefined"){
             ws.close();
         }
+        console.log("clicked on: " + id);
         document.getElementById("messages").innerHTML="";
 
         var request = new XMLHttpRequest()
 
-        request.open('GET', 'http://localhost:5006/chat/'+userID+'/'+id, true)
+        request.open('GET', 'http://192.168.99.105:30506/chat/'+userID+'/'+id, true)
         request.onload = function() {
           // Begin accessing JSON data here
           var data = JSON.parse(this.response);
@@ -65,6 +67,7 @@
           if(messages!=undefined){
               for(var i = 0; i < messages.length; i++) {
                 var obj = messages[i];
+                console.log("messages obj");
                 console.log(obj)
                 var messageBox = document.createElement("div");
                 var text = document.createElement("p");
@@ -88,10 +91,10 @@
                 document.getElementById("messages").appendChild(messageBox);
               }
           }
-
+          console.log("messages:");
           console.log(messages);
           if (request.status >= 200 && request.status < 400) {
-            ws = new WebSocket("ws://127.0.0.1:8888/websocket/"+data.id);
+            ws = new WebSocket("ws://192.168.99.105:30511/websocket/"+data.id);
 
             ws.onmessage = function(evt) {
                 var messageDict = JSON.parse(evt.data);
