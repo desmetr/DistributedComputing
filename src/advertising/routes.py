@@ -66,17 +66,29 @@ def getAllAdvertisement():
 
 @advApp.route("/advertisement",  methods=["GET", "POST"])
 def addAdvertisement():
-    adForm = AdvertisementForm()
-    print("Checking form")
-    if adForm.validate_on_submit():
-        print("valid")
-        print(adForm.image.data)
-        newAd = Advertisement(tag=str(adForm.tag.data).lower(),text=adForm.advertisementText.data,source_url=adForm.source.data,img=base64.b64encode(adForm.image.data.read()).decode('utf-8'))
-        advDB.session.add(newAd)
-        advDB.session.commit()
-        return "Ad has been added correctly!"
-        
-    return render_template("advertising.html", title="Advertisement", adForm=adForm)
+    global current_user_id
+    current_user_id = request.cookies.get("currentSessionCookie")
+    if current_user_id:
+        # Get current user information
+        print(current_user_id)
+        current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
+
+        if current_user_response.status_code == 200:
+            adForm = AdvertisementForm()
+            print("Checking form")
+            if adForm.validate_on_submit():
+                print("valid")
+                print(adForm.image.data)
+                newAd = Advertisement(tag=str(adForm.tag.data).lower(),text=adForm.advertisementText.data,source_url=adForm.source.data,img=base64.b64encode(adForm.image.data.read()).decode('utf-8'))
+                advDB.session.add(newAd)
+                advDB.session.commit()
+                return "Ad has been added correctly!"
+                
+            return render_template("advertising.html", title="Advertisement", adForm=adForm)
+        else:
+            return redirect(urlsConfig.URLS['login_url'])
+    else:
+        return redirect(urlsConfig.URLS['login_url'])
 
     #img=""
     #with open("static/img/Growing-Potatoes-Commercially.png", "rb") as image_file:

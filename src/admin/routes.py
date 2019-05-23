@@ -8,17 +8,32 @@ import requests
 import json
 import urllib.request
 
+current_user_id=0
+
 @app.route("/admin", methods=['GET'])
 def admin():
-    users = requests.get(urlsConfig.URLS['users_url']).json()
-    comments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-    posts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-    advertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_advertisements_url']).read())
-    # advertisements = requests.get(urlsConfig.URLS['advertisements_url']).json()
+    global current_user_id
+    current_user_id = request.cookies.get("currentSessionCookie")
+    if current_user_id:
+        # Get current user information
+        print(current_user_id)
+        current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
 
-    form = DeleteForm()
+        if current_user_response.status_code == 200:
+            users = requests.get(urlsConfig.URLS['users_url']).json()
+            comments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+            posts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+            advertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['all_advertisements_url']).read())
+            # advertisements = requests.get(urlsConfig.URLS['advertisements_url']).json()
 
-    return render_template("admin.html", users=users, comments=comments, posts=posts, advertisements=advertisements, deleteForm=form)
+            form = DeleteForm()
+
+            return render_template("admin.html", users=users, comments=comments, posts=posts, advertisements=advertisements, deleteForm=form)
+
+        else:
+            return redirect(urlsConfig.URLS['login_url'])
+    else:
+        return redirect(urlsConfig.URLS['login_url'])
 
 @app.route("/deleteUser", methods=['GET', 'POST'])
 def deleteUser():

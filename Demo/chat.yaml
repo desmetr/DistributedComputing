@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chat
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+      - name: chat
+        image: jordanparezysua/chat-service
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service
+spec:
+  type: NodePort
+  selector:
+    app: chat
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30506

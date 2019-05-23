@@ -19,7 +19,7 @@ class User(UserMixin, loginDB.Model):
 	admin = loginDB.Column(loginDB.Boolean, default=False)
 
 	def __repr__(self):
-		return "<User {}, {}, admin = {}>".format(self.username, self.location, self.admin)
+		return "<User {}, id = {} , {}, admin = {}>".format(self.username, self.id, self.location, self.admin)
 
 	def calculateLatLng(self):
 		search_payload = {"key" : key, "query" : self.location}

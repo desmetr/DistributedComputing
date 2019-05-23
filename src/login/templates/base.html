@@ -1,14 +1,18 @@
 <html>
     <head>
       {% if title %}
-      <title>{{ title }} - Feesbook</title>
+      <title>{{ title }} - Coltivate</title>
       {% else %}
-      <title>Welcome to Feesbook</title>
+      <title>Welcome to Coltivate</title>
       {% endif %}
+      <link rel="stylesheet" type="text/css" href="{{  url_for('static', filename='css/menu.css') }}">
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
     </head>
     <body>
         <div>
-          Feesbook:
+          Coltivate:
           {% if current_user.is_anonymous %}
           <a href="{{ url_for('login') }}">Login</a>
           {% else %}

@@ -7,6 +7,7 @@ from location import urlsConfig
 
 IN_RADIUS = False
 ICON = False
+current_user_id=0
 current_user = None
 
 @locationApp.route("/location", methods=["GET", "POST"])
@@ -21,77 +22,81 @@ def location():
 	current_user_id = request.cookies.get("currentSessionCookie")
 	if current_user_id:
 		# Get current user information
-		current_user = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id)).json()['data']
+		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
+		if current_user_response.status_code == 200:
+			current_user = current_user_response.json()['data']
 
-		addresses = getAllAddressesFromUsers()
+			addresses = getAllAddressesFromUsers()
 
-		locationScriptStart = open("static/locationScriptStart.js", "r")
-		locationScript = locationScriptStart.read()
-		locationScriptStart.close()
+			locationScriptStart = open("static/locationScriptStart.js", "r")
+			locationScript = locationScriptStart.read()
+			locationScriptStart.close()
 
-		for _, address in enumerate(addresses):
-			# Don't wanna see yourself, so excluded.
-			if current_user['id'] != address[0]:
-				lat = address[2]
-				lng = address[3]
+			for _, address in enumerate(addresses):
+				# Don't wanna see yourself, so excluded.
+				if current_user['id'] != address[0]:
+					lat = address[2]
+					lng = address[3]
 
-				currentVegetables = []
-				vegetablesResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
-				if vegetablesResponse.json():
-					currentVegetables = vegetablesResponse.json()
+					currentVegetables = []
+					vegetablesResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getVegetables")
+					if vegetablesResponse.json():
+						currentVegetables = vegetablesResponse.json()
 
-				currentFruits = []
-				fruitsResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
-				if fruitsResponse.json():
-					currentFruits = fruitsResponse.json()
+					currentFruits = []
+					fruitsResponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getFruits")
+					if fruitsResponse.json():
+						currentFruits = fruitsResponse.json()
 
-				currentHerbs = []
-				herbsReponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
-				if herbsReponse.json():
-					currentHerbs = herbsReponse.json()
+					currentHerbs = []
+					herbsReponse = requests.get(urlsConfig.URLS['garden_url'] + "/" + str(address[0]) + "/getHerbs")
+					if herbsReponse.json():
+						currentHerbs = herbsReponse.json()
 
-				if ICON:
+					if ICON:
+						locationScript += """
+							icon: '""" + address[4] + """',
+							"""
+
+					contentString = getContentString(address, currentVegetables, currentFruits, currentHerbs)
+							
 					locationScript += """
-						icon: '""" + address[4] + """',
+						var contentString = """ + contentString + """;
+						var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
+							position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
+							content: contentString,"""
+
+					if not IN_RADIUS:
+						locationScript += """
+							map: map,
+							"""
+
+					locationScript += """
+						})
+
 						"""
 
-				contentString = getContentString(address, currentVegetables, currentFruits, currentHerbs)
-						
-				locationScript += """
-					var contentString = """ + contentString + """;
-					var infoWindow""" + str(address[0]) + """ = new google.maps.InfoWindow({
-						position: {lat: """ + str(lat) + """, lng: """ + str(lng) + """},
-						content: contentString,"""
-
-				if not IN_RADIUS:
-					locationScript += """
-						map: map,
+					contentString = ""
+				
+					if IN_RADIUS:
+						locationScript += """
+							if (checkRadius(currentPso.lat, currentPos.lng, """ + str(lat) + """, """ + str(lng) + """, zoomLevel))
+								marker""" + str(address[0]) + """.setMap(null);
+							else
+								marker""" + str(address[0]) + """.setMap(map);
 						"""
 
-				locationScript += """
-					})
+			locationScriptEnd = open("static/locationScriptEnd.js", "r")
+			locationScript += locationScriptEnd.read()
+			locationScriptEnd.close()
 
-					"""
+			f = open("static/locationScript.js", "w+")
+			f.write(locationScript)
+			f.close()
 
-				contentString = ""
-			
-				if IN_RADIUS:
-					locationScript += """
-						if (checkRadius(currentPso.lat, currentPos.lng, """ + str(lat) + """, """ + str(lng) + """, zoomLevel))
-							marker""" + str(address[0]) + """.setMap(null);
-						else
-							marker""" + str(address[0]) + """.setMap(map);
-					"""
-
-		locationScriptEnd = open("static/locationScriptEnd.js", "r")
-		locationScript += locationScriptEnd.read()
-		locationScriptEnd.close()
-
-		f = open("static/locationScript.js", "w+")
-		f.write(locationScript)
-		f.close()
-
-		return render_template("location.html")
+			return render_template("location.html")
+		else:
+			return redirect(urlsConfig.URLS['login_url'])
 	else:
 		return redirect(urlsConfig.URLS['login_url'])
 

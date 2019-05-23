@@ -15,9 +15,21 @@ current_user_id = ""
 @app.route("/")
 @app.route("/garden", methods=['GET', 'POST'])
 def garden():
-    gardenItems = Garden.query.all();
+    global current_user_id
+    current_user_id = request.cookies.get("currentSessionCookie")
+    if current_user_id:
+        # Get current user information
+        print(current_user_id)
+        current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
 
-    return (render_template('garden.html', title="Garden",  gardenItems=gardenItems))
+        if current_user_response.status_code == 200:
+            gardenItems = Garden.query.all();
+
+            return (render_template('garden.html', title="Garden",  gardenItems=gardenItems))
+        else:
+            return redirect(urlsConfig.URLS['login_url'])
+    else:
+        return redirect(urlsConfig.URLS['login_url'])
 
 #Display under Garden page, Prints all veggies in db (no user specific)
 @app.route("/garden/vegetable", methods=['GET','POST'])

@@ -82,15 +82,6 @@
               cursor: pointer;
             }
       </style>
-
-      <script type="text/javascript">
-        // If not an admin, hide the link.
-        if ({{ isAdmin != true }})
-          adminLink = document.getElementById("adminLink")
-          adminLink.style.display = 'hidden';
-          //link.style.visibility = 'none';
-      </script>
-
     <h1>Your newsfeed</h1>
 
 
@@ -123,7 +114,7 @@
                         <i>No comments on this post.</i>
                     {% endif %} 
 
-                    <form action="http://192.168.99.103:30502/comment" method="POST">
+                    <form action="http://192.168.99.100:30502/comment" method="POST">
                         <input type="hidden" name="postID" value={{ post.id }}>
                         {{ commentForm.hidden_tag() }}
                         <p>

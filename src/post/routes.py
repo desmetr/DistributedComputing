@@ -14,6 +14,8 @@ import urllib.request
 import base64
 postText = ""
 
+current_user_id=""
+
 @postApp.route("/getAllPosts", methods=["GET"])
 def getAllPosts():
 	posts = Post.query.order_by(desc(Post.timestamp)).all()
@@ -21,59 +23,69 @@ def getAllPosts():
 
 @postApp.route("/post", methods=["GET", "POST"])
 def makePost():
-	global postText
-	
-	postForm = PostForm()
-	postFormAfterCheck = PostFormAfterCheck()
+	global current_user_id, postText
+	current_user_id = request.cookies.get("currentSessionCookie")
+	if current_user_id:
+		# Get current user information
+		current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
 
-	if postForm.validate_on_submit():
-		postText = postForm.postText.data
-		image = ""
-		if postForm.image.data:
-			image = base64.b64encode(postForm.image.data.read()).decode('utf-8')
+		if current_user_response.status_code == 200:
 
-		response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': postText})
+			postForm = PostForm()
+			postFormAfterCheck = PostFormAfterCheck()
 
-		# Only show div is post contained a bad word
-		if response.text == "BAD":
-			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
-		elif response.text == "GOOD":
-			print("postReading")
-			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
-			postDB.session.add(post)
-			postDB.session.commit()
-			flash("Successfully created a new post!")
-			#return redirect(urlsConfig.URLS['newsfeed_url'])
-			users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
-			print(users)
-			postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
-			print(postJson)
-			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
+			if postForm.validate_on_submit():
+				postText = postForm.postText.data
+				image = ""
+				if postForm.image.data:
+					image = base64.b64encode(postForm.image.data.read()).decode('utf-8')
 
-	if postFormAfterCheck.validate_on_submit():
-		if postFormAfterCheck.submitAfterCheck.data:
-			post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
-			postDB.session.add(post)
-			postDB.session.commit()
+				response = requests.post(urlsConfig.URLS['profanity_url'], params={'text': postText})
 
-			flash("Successfully created a new post!")
-			# When the user decides to submit anyway, show the newsfeed.
-			#return redirect(urlsConfig.URLS['newsfeed_url'])
-			users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
-			print(users)
-			postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
-			print(postJson)
-			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
+				# Only show div is post contained a bad word
+				if response.text == "BAD":
+					return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
+				elif response.text == "GOOD":
+					print("postReading")
+					post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
+					postDB.session.add(post)
+					postDB.session.commit()
+					flash("Successfully created a new post!")
+					#return redirect(urlsConfig.URLS['newsfeed_url'])
+					users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
+					print(users)
+					postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
+					print(postJson)
+					return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
+
+			if postFormAfterCheck.validate_on_submit():
+				if postFormAfterCheck.submitAfterCheck.data:
+					post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
+					postDB.session.add(post)
+					postDB.session.commit()
+
+					flash("Successfully created a new post!")
+					# When the user decides to submit anyway, show the newsfeed.
+					#return redirect(urlsConfig.URLS['newsfeed_url'])
+					users = json.loads(urllib.request.urlopen(urlsConfig.URLS['allFriends_url']).read())
+					print(users)
+					postJson = json.dumps({"postText":post.postText,"user":post.user, "friends":users})
+					print(postJson)
+					return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="true", postInfo=postJson)
 
 
-		elif postFormAfterCheck.discardAfterCheck.data:
-			print("Pressed discard")
-			# When the user decides to discard post, let him make a new one.
-			return redirect(url_for("makePost"))
+				elif postFormAfterCheck.discardAfterCheck.data:
+					print("Pressed discard")
+					# When the user decides to discard post, let him make a new one.
+					return redirect(url_for("makePost"))
+				else:
+					pass
+
+			return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="false")
 		else:
-			pass
-
-	return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='none', submitted="false")
+			return redirect(urlsConfig.URLS['login_url'])
+	else:
+		return redirect(urlsConfig.URLS['login_url'])
 
 @postApp.route('/makeComment', methods=["GET", "POST"])
 def makeComment():

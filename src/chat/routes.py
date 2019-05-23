@@ -14,15 +14,23 @@ current_user_id = ""
 @chatApp.route("/chat", methods=['GET' , 'POST'])
 def chat():  
     global current_user_id
-    
-    print("Cookie:")
-    print(request.cookies.get("currentSessionCookie"))  
     current_user_id = request.cookies.get("currentSessionCookie")
-    users=[]
-    friends = json.loads(urllib.request.urlopen(urlsConfig.URLS['users_url']).read().decode('utf-8'))
-    for friend in friends:
-        print(friend["id"]) 
-    return render_template('chat.html', title="Chat",  users=friends)
+    if current_user_id:
+        # Get current user information
+        print(current_user_id)
+        current_user_response = requests.get(urlsConfig.URLS['single_user_url'] + str(current_user_id))
+
+        if current_user_response.status_code == 200:
+            users=[]
+            friends = json.loads(urllib.request.urlopen(urlsConfig.URLS['users_url']).read().decode('utf-8'))
+            for friend in friends:
+                print(friend["id"]) 
+            return render_template('chat.html', title="Chat",  users=friends)
+
+        else:
+            return redirect(urlsConfig.URLS['login_url'])
+    else:
+        return redirect(urlsConfig.URLS['login_url'])
 
 @chatApp.route("/chat/<username1>/<username2>", methods=["GET"])
 def getChatId(username1,username2):

@@ -8,21 +8,21 @@ from login import urlsConfig
 
 @loginApp.route("/login", methods=["GET", "POST"])
 def login():
-	form = LoginForm()
-	if form.validate_on_submit():
-		user = User.query.filter_by(username=form.username.data).first()
+	loginForm = LoginForm()
+	if loginForm.validate_on_submit():
+		user = User.query.filter_by(username=loginForm.username.data).first()
 
-		if user is None or not user.check_password(form.password.data):
+		if user is None or not user.check_password(loginForm.password.data):
 			flash("Invalid username or password")
 			return redirect(url_for("login"))
 
-		login_user(user, remember=form.remember_me.data)
-		
+		login_user(user, remember=loginForm.remember_me.data)
+
 		response = redirect(urlsConfig.URLS['newsfeed_url'])
 		response.set_cookie("currentSessionCookie", str(user.id))
 		return response	
 
-	return render_template("login.html", title="Sign In", form=form)
+	return render_template("login.html", title="Sign In", loginForm=loginForm)
 
 @loginApp.route("/logout")
 def logout():
@@ -45,7 +45,7 @@ def register():
 		response.set_cookie("currentSessionCookie", str(user.id))
 		return response	
 
-	return render_template("register.html", title="Register", form=form)
+	return render_template("register.html", title="Register", registerForm=form)
 
 @loginApp.route("/users", methods=["GET"])
 def getUsers():

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: newsfeed
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: newsfeed
+    spec:
+      containers:
+      - name: newsfeed
+        image: jordanparezysua/newsfeed-service
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: newsfeed-service
+spec:
+  type: NodePort
+  selector:
+    app: newsfeed
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30503

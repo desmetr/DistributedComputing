@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: location
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: location
+    spec:
+      containers:
+      - name: location
+        image: jordanparezysua/location-service
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: location-service
+spec:
+  type: NodePort
+  selector:
+    app: location
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30507
