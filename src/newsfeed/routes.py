@@ -22,7 +22,7 @@ def newsfeed():
 			# Success!
 			isAdmin = current_user_response.json()['data']['admin']
 
-			# Get all posts ---> THIS IS IN COMMENT JUST TO TEST OTHER STUFF, THIS IS THE CORRECT CODE
+			# Get all posts
 			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
 			# allPosts = []
 
@@ -31,10 +31,8 @@ def newsfeed():
 			# allComments = []
 
 			# Get all advertisements
-			#allAdvertisements = requests.get(urlsConfig.URLS['advertisements_url']+"/b")
-			allAdvertisements = []
-			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
-			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/b").read().decode('utf-8'))
+			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
+			# allAdvertisements = []
 
 			commentForm = CommentForm()
 
