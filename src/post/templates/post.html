@@ -1,8 +1,7 @@
 {% extends "header.html" %}
 
 {% block content %}
-    <h1>Create Post</h1>
-
+    
     <div class="modal" id="postModal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -40,17 +39,19 @@
 
         if ({{submitted}}){
             console.log("submitted was true");
-            var ws = new WebSocket("ws://127.0.0.1:8889/notifications/sending");
+            var ws = new WebSocket("ws://192.168.99.105:30512/notifications/sending");
             ws.onopen = function(){
                 ws.send("{{postInfo}}");
                 ws.close()
-                window.location.replace("http://localhost:5003/newsfeed");
+                window.location.replace("http://192.168.99.105:30503/newsfeed");
             }
         } else {
             console.log("submitted was false")
         }
     </script>
 
+ <div style="background: white">
+    <h1>Create Post</h1>
 
     <form action="" method="post" novalidate enctype = "multipart/form-data">
         {{ postForm.hidden_tag() }}
@@ -64,4 +65,5 @@
         </p>
         <p>{{ postForm.submit() }}</p>
     </form>
+</div>
 {% endblock %}

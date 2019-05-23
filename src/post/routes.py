@@ -144,14 +144,14 @@ def redirectToLocation():
     response.set_cookie("currentSessionCookie", str(current_user_id))
     return response 
 
-@postApp.errorhandler(Exception)
-def exceptionHandler(error):
-	print(error)
-	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-	if "profanity" in repr(error).lower():
-		errorString += " to the Cyber Bullying service."
-	elif "comment" in repr(error).lower():
-		errorString += " to the Comment service."
-	else:
-		errorString += "."
-	return errorString
+# @postApp.errorhandler(Exception)
+# def exceptionHandler(error):
+# 	print(error)
+# 	errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+# 	if "profanity" in repr(error).lower():
+# 		errorString += " to the Cyber Bullying service."
+# 	elif "comment" in repr(error).lower():
+# 		errorString += " to the Comment service."
+# 	else:
+# 		errorString += "."
+# 	return errorString
