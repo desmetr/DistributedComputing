@@ -33,6 +33,13 @@
                 modal.style.display = "none";
               }
             }
+
+            // If not an admin, hide the link.
+            if ({{ isAdmin }} == false)
+            {
+              adminLink = document.getElementById("adminLink")
+              adminLink.style.display = "none";
+            }
         } 
       </script>
 

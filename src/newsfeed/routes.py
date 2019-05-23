@@ -21,6 +21,7 @@ def newsfeed():
 		if current_user_response.status_code == 200:
 			# Success!
 			isAdmin = current_user_response.json()['data']['admin']
+			isAdmin = "true" if isAdmin else "false" # Python uses True and False, javascript uses true and false, need to translate it
 
 			# Get all posts
 			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
