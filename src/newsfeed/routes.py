@@ -24,16 +24,16 @@ def newsfeed():
 			isAdmin = "true" if isAdmin else "false" # Python uses True and False, javascript uses true and false, need to translate it
 
 			# Get all posts
-			#allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
-			allPosts = []
+			allPosts = requests.get(urlsConfig.URLS['all_posts_url']).json()
+			# allPosts = []
 
 			# Get all comments
-			# allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
-			allComments = []
+			allComments = requests.get(urlsConfig.URLS['all_comments_all_posts_url']).json()
+			# allComments = []
 
 			# Get all advertisements
-			# allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
-			allAdvertisements = []
+			allAdvertisements = json.loads(urllib.request.urlopen(urlsConfig.URLS['advertisements_url']+"/"+str(current_user_id)).read())
+			# allAdvertisements = []
 
 			commentForm = CommentForm()
 

@@ -41,7 +41,7 @@
         txtMessage.value = "";
 
         var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-        var theUrl = "http://192.168.99.105:30506/chatHistory";
+        var theUrl = "http://192.168.99.100:30506/chatHistory";
         xmlhttp.open("POST", theUrl);
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlhttp.send(JSON.stringify(payload));
@@ -58,7 +58,7 @@
 
         var request = new XMLHttpRequest()
 
-        request.open('GET', 'http://192.168.99.105:30506/chat/'+userID+'/'+id, true)
+        request.open('GET', 'http://192.168.99.100:30506/chat/'+userID+'/'+id, true)
         request.onload = function() {
           // Begin accessing JSON data here
           var data = JSON.parse(this.response);
@@ -94,7 +94,7 @@
           console.log("messages:");
           console.log(messages);
           if (request.status >= 200 && request.status < 400) {
-            ws = new WebSocket("ws://192.168.99.105:30511/websocket/"+data.id);
+            ws = new WebSocket("ws://192.168.99.100:30511/websocket/"+data.id);
 
             ws.onmessage = function(evt) {
                 var messageDict = JSON.parse(evt.data);

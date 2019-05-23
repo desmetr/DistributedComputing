@@ -39,11 +39,11 @@
 
         if ({{submitted}}){
             console.log("submitted was true");
-            var ws = new WebSocket("ws://192.168.99.105:30512/notifications/sending");
+            var ws = new WebSocket("ws://localhost:30512/notifications/sending");
             ws.onopen = function(){
                 ws.send("{{postInfo}}");
                 ws.close()
-                window.location.replace("http://192.168.99.105:30503/newsfeed");
+                window.location.replace("http://192.168.99.100:30503/newsfeed");
             }
         } else {
             console.log("submitted was false")
