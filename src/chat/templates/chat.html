@@ -1,6 +1,6 @@
 {% extends "header.html" %}
 {% block content %}
-<a href="http://localhost:5005/garden">Go to garden</a>
+<a href="http://192.168.99.100:30503/newsfeed">Go to newsfeed</a>
 <div style="height:100%">
     <div style="float: left;width:15%;height:92vh;border-right: 1px solid grey;" id="users">
         {% for user in users %}
@@ -21,7 +21,7 @@
     </div>
 </div>
     <script>
-    var userID = {{userID}};
+    var userID = "{{userID}}";
     console.log("userID: " + userID);
     var ws;
     var chatID;

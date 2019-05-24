@@ -137,7 +137,7 @@ def getFriendship():
 
 @loginApp.route("/getAllFriends", methods=["GET"])
 def getAllFriends():
-	foundUser = User.query.filter(User.username=="b").first()
+	foundUser = User.query.filter(User.id==2).first()
 	print("foundUser:")
 	print(foundUser)
 	foundFriends = Friendship.query.filter((Friendship.user1 == foundUser.id) | (Friendship.user2 == foundUser.id)).all()

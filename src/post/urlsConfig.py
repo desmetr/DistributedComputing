@@ -29,5 +29,5 @@ URLS = {
 
 	'advertisements_url':			'http://192.168.99.100:30509/getAdvertisements',
 	'all_advertisements_url':		'http://192.168.99.100:30509/getAllAdvertisements',
-	'delete_advertisement_url':			'http://192.168.99.100:30509/deleteAdvertisement?adv_id='
+	'delete_advertisement_url':		'http://192.168.99.100:30509/deleteAdvertisement?adv_id='
 }

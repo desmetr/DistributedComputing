@@ -9,6 +9,7 @@ import urllib.request
 from advertising import urlsConfig
 import base64
 from advertising.forms import AdvertisementForm
+import requests
 
 @advApp.route("/getAdvertisements/<userId>")
 def advertisement(userId):
@@ -106,22 +107,22 @@ def deleteAdverstiment():
     advDB.session.commit()
     return "OK"
 
-@advApp.errorhandler(Exception)
-def exceptionHandler(error):
-    print(error)
-    errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
-    if "post" in repr(error).lower():
-        errorString += " to the Post service."
-    elif "comment" in repr(error).lower():
-        errorString += " to the Comment service."
-    elif "photo" in repr(error).lower():
-        errorString += " to the Photo service."
-    elif "advertisements" in repr(error).lower():
-        errorString += " to the Advertisement service."
-    elif "user" in repr(error).lower():
-        errorString += " to the Login service."
-    elif "location" in repr(error).lower():
-        errorString += " to the Location service."
-    else:
-        errorString += "."
-    return errorString
+# @advApp.errorhandler(Exception)
+# def exceptionHandler(error):
+#     print(error)
+#     errorString = "Something went wrong! It seems there was a " + error.__class__.__name__ + " while making a request"
+#     if "post" in repr(error).lower():
+#         errorString += " to the Post service."
+#     elif "comment" in repr(error).lower():
+#         errorString += " to the Comment service."
+#     elif "photo" in repr(error).lower():
+#         errorString += " to the Photo service."
+#     elif "advertisements" in repr(error).lower():
+#         errorString += " to the Advertisement service."
+#     elif "user" in repr(error).lower():
+#         errorString += " to the Login service."
+#     elif "location" in repr(error).lower():
+#         errorString += " to the Location service."
+#     else:
+#         errorString += "."
+#     return errorString

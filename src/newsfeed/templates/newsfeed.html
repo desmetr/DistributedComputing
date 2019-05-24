@@ -6,7 +6,7 @@
         // Get the modal
         
         window.onload=function(){
-          ws = new WebSocket("ws://localhost:30512/notifications/{{userID}}");
+          ws = new WebSocket("ws://192.168.99.100:30512/notifications/{{userID}}");
         
           ws.onopen = function(){
             console.log("We connected to the websocket");
@@ -41,6 +41,8 @@
             {
               adminLink = document.getElementById("adminLink")
               adminLink.style.display = "none";
+              advertisementLink = document.getElementById("advertisementLink")
+              advertisementLink.style.display = "none";
             }
         } 
       </script>

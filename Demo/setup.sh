@@ -9,3 +9,5 @@ kubectl apply -f location.yaml
 kubectl apply -f login.yaml
 kubectl apply -f newsfeed.yaml
 kubectl apply -f post.yaml
+kubectl apply -f notification-socket.yaml
+kubectl apply -f chat-socket.yaml

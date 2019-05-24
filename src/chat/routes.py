@@ -13,7 +13,7 @@ current_user_id = ""
 
 @chatApp.route("/")
 @chatApp.route("/chat", methods=['GET' , 'POST'])
-def chat():  
+def chat():
     global current_user_id
     current_user_id = request.cookies.get("currentSessionCookie")
     if current_user_id:

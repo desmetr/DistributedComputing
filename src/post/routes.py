@@ -44,10 +44,10 @@ def makePost():
 
 				# Only show div is post contained a bad word
 				if response.text == "BAD":
-					return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='', submitted="false")
+					return render_template("post.html", title="Post", postForm=postForm, postFormAfterCheck=postFormAfterCheck, display='block', submitted="false")
 				elif response.text == "GOOD":
 					print("postReading")
-					post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
+					post = Post(postText=postText, user=str(current_user_id), timestamp=datetime.now(),image=image)
 					postDB.session.add(post)
 					postDB.session.commit()
 					flash("Successfully created a new post!")
@@ -60,7 +60,7 @@ def makePost():
 
 			if postFormAfterCheck.validate_on_submit():
 				if postFormAfterCheck.submitAfterCheck.data:
-					post = Post(postText=postText, user="2", timestamp=datetime.now(),image=image)
+					post = Post(postText=postText, user=str(current_user_id), timestamp=datetime.now(),image=image)
 					postDB.session.add(post)
 					postDB.session.commit()
 
